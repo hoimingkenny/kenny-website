@@ -1,0 +1,123 @@
+
+
+
+
+
+
+
+
+```java
+@SuppressWarnings({"all"})
+public class CustomMethodGeneric {
+    public static void main(String[] args) {
+        Car car = new Car();
+        car.fly("BMW", 100);  // The compiler determines the types as String and Integer
+        System.out.println("=======");
+        car.fly(300, 100.1);  // The compiler determines the types as Integer and Double
+
+        // Test generic method in a generic class
+        Fish<String, ArrayList> fish = new Fish<>();
+        fish.hello(new ArrayList(), 11.3f);  // ArrayList and Float
+    }
+}
+
+// Generic method in a normal class
+class Car {
+    public void run() {
+    }
+
+    // <T, R> indicates generic types specific to this method
+    public <T, R> void fly(T t, R r) {
+        System.out.println(t.getClass());  // Prints the class of t
+        System.out.println(r.getClass());  // Prints the class of r
+    }
+}
+
+// Generic method in a generic class
+class Fish<T, R> {
+    public void run() {
+    }
+
+    public <U, M> void eat(U u, M m) {
+    }
+
+    // Uses class-level generics (T) in this method
+    public void hi(T t) {
+    }
+
+    // Both class-level generics and method-specific generics
+    public <K> void hello(R r, K k) {
+        System.out.println(r.getClass());  // ArrayList
+        System.out.println(k.getClass());  // Float
+    }
+}
+```
+
+
+### Generics and Wildcards
+Explanation of Generics and Wildcards
+1. Generics do not have inheritance
+   ```java
+   List<Object> list = new ArrayList<String>();  // Error
+   ```
+2. Wildcards
+- <?>: Accepts any generic type.
+- <? extends A>: Accepts A and its subclasses (upper bound).
+- <? super A>: Accepts A and its superclasses (lower bound).
+```java
+    public class GenericExtends {
+    public static void main(String[] args) {
+        Object o = new String("xx");
+
+        // Wildcard examples
+        List<Object> list1 = new ArrayList<>();
+        List<String> list2 = new ArrayList<>();
+        List<AA> list3 = new ArrayList<>();
+        List<BB> list4 = new ArrayList<>();
+        List<CC> list5 = new ArrayList<>();
+
+        // <?>: Accepts any generic type
+        printCollection1(list1);
+        printCollection1(list2);
+        printCollection1(list3);
+        printCollection1(list4);
+        printCollection1(list5);
+
+        // <? extends AA>: Accepts AA and its subclasses
+        printCollection2(list3);
+        printCollection2(list4);
+        printCollection2(list5);
+
+        // <? super AA>: Accepts AA and its superclasses
+        printCollection3(list1);
+        printCollection3(list3);
+    }
+
+    public static void printCollection1(List<?> c) {
+        for (Object object : c) {
+            System.out.println(object);
+        }
+    }
+
+    public static void printCollection2(List<? extends AA> c) {
+        for (Object object : c) {
+            System.out.println(object);
+        }
+    }
+
+    public static void printCollection3(List<? super AA> c) {
+        for (Object object : c) {
+            System.out.println(object);
+        }
+    }
+}
+
+class AA {
+}
+
+class BB extends AA {
+}
+
+class CC extends BB {
+}
+```
