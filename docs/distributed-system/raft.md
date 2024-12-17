@@ -7,12 +7,96 @@
 3. Raft Lecture: https://www.youtube.com/watch?v=YbZ3zDzDnrw
 4. Raft Lecture2: https://www.bilibili.com/video/BV1pr4y1b7H5/?spm_id_from=333.337.search-card.all.click&vd_source=2fab8a9f7369864b7e2281f0914d89b5
 
+## Replicated Log
+- Replicated State Machine: All server execute same commands in same order
+
+### Approaches to Consensus
+1. Symmetric, Leader-less:
+   - All servers have equal roles
+   - Clients can contact any server
+2. Asymmetric, Leader-based:
+   - At any given time, one server is in charge, others accept its decisions
+   - Clients communicate with the leader
+3. Raft uses a leader:
+   - Leader changes
+
+### Leader Election
+In Raft there are two timeout settings which control elections. First is the election timeout. The election timeout is the amount of time a follower waits until becoming a candidate.
+The election timeout is randomized to be between 150ms and 300ms. After the election timeout the follower becomes a candidate and starts a new election term.
+The candidate votes for itself, and sends out Request Vote messages to other nodes. If the receiving node hasn't voted yet in this term then it votes for the candidate.
+and the node resets its election timeout. Once a candidate has a majority of votes it becomes leader.
+
+The leader begins sending out Append Entries messages to its followers. These messages are sent in intervals specified by the heartbeat timeout.
+Followers then respond to each Append Entries message. This election term will continue until a follower stops receiving heartbeats and becomes a candidate.
+
+Requiring a majority of votes guarantees that only one leader can be elected per term.
+If two nodes become candidates at the same time then a split vote can occur.
+
+### Log Replication
+Once we have a leader elected we need to replicate all changes to our system to all nodes.
+This is done by using the same Append Entries message that was used for heartbeats.
+First a client sends a change to the leader.
+The change is appended to the leader's log then the change is sent to the followers on the next heartbeat.
+An entry is committed once a majority of followers acknowledge it and a response is sent to the client.
+
+Raft can even stay consistent in the face of network partitions.
+
+#### Terms:
+- Time divided into terms: 
+  - Election
+  - Normal operation under a single leader
+- At most 1 leader per term
+- Some terms have no leader (failed election, no one can get the majority of vote)
+- Each server maintains current term value
+- Key role of terms: identify obsolete information
+
 ## Summary Question
 ### Leader Election
-1. Provide a concise overview of the mechanism for leader election.
-2. What roles exist in the Raft protocol, and what are their respective responsibilities?
-3. What is leader election in the Raft protocol, and what happens if leader election fails?
-4. How do Follower, Candidate, and Leader states transition in the Raft protocol?
+#### 1. Provide a concise overview of the mechanism for leader election.
+
+#### 2. What roles exist in the Raft protocol, and what are their respective responsibilities?
+   - And any given time, each server is either:
+   - Leader: handles all client interactions, log replication
+   - Follower: completely passive (issues no RPCs, responds to incoming RPCs)
+   - Candidate: use to elect a new leader
+
+   - Normal operation: 1 leader, N-1 followers
+
+#### 3. What is leader election in the Raft protocol, and what happens if leader election fails? 
+   - Leader election can fail if:
+     - No majority agreement
+     - Split vote
+
+   - When leader election fails:
+     1. Restart Election
+        - Each candidate waits for a new random election timeout and restarts the election process, reducing the likelihood of repeated split votes 
+     2. Cluster Unavailability
+        - The cluster cannot process client requests as Raft requires a leader to coordinate operations 
+     3. Stale Terms
+        - If the election process continues for too long without success, term mismatches may arise.
+
+#### 4. How do Follower, Candidate, and Leader states transition in the Raft protocol?
+   1. Follower State
+      - Default state for all servers in the cluster
+      - Follower -> Candidate
+        - Occurs when a follower does not receive any valid leader communication (heartbeat or log entries) within the election timeout
+   2. Candidate State
+      - When a follower times out without hearing from a leader
+      - The candidate increments its term number and vote for itself, and sends `RequestVote` RPCs to all other servers
+      - Candidate -> Leader:
+        - If the candidate receives a majority of votes
+        - The leader immediately starts sending heartbeat messages (AppendEntries RPC) to all followers to assert its authority
+      - Candidate -> Follower:
+        - If the candidate receives an `AppendEntries` RPC from another server with a higher term, it recognizes a legitimate leader and reverts to a follower
+        - If a new term(higher) is detected from another server's `RequestVote` RPC, the candidate steps down to a follower
+      - Candidate -> Candidate:
+        - If there is no majority (e.g. due to split votes), the election times out, and the candidate restarts the election process with an incremented term
+   3. Leader State
+      - Responsible for coordinating all log operations and maintaining cluster consistency
+      - Send regular heartbeat message (via AppendEntries RPC) to followers to to maintain authority
+      - Handle client requets and ensures replicated 
+   
+
 5. What is a Term in the Raft protocol, and how is it used to ensure consistency?
 6. How does the Raft protocol prevent performance degradation caused by excessive leader elections?
 7. What is the heartbeat mechanism in the Raft protocol, and what is its purpose?
