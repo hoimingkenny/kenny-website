@@ -136,22 +136,113 @@
 ## Distributed Data
 ### Replication
 #### 1. What is the difference between synchronous and asynchronous replication?
+- Synchronous Replication: The leader waits for confirmation from follower that it has received and written the data before acknowledge a client.
+  - Advantage: The follow is guaranteed to have an up-to-date copy of the data that is consistent with the leader
+  - Disadvantage: If the follower does not respond, the write cannot be processed
+- Asynchronous Replication: The leader do not wait for response from followers
+    
+- Semi-asynchronous: One of the follow is synchronous and the others are asynchronous. If the synchronous follower is unavailable or slow, one of the asynchronous followers is made synchronous. This guarantees that you have up-to-date copy of data on two nodes.
+
 #### 2. What is replication in distributed systems?
+- The process of maintaining multiple copies of data across different nodes in a distributed system
+- Fault Tolerance: Ensuring availability even if some nodes fail.
+- Performance: Allowing reads to be distributed across replicas, reducing latency.
+- Scalability: Managing increased load by balancing it across replicas.
+
 #### 3. What are master-slave replication and multi-master replication?
+Master-Slave Replication
+- Single leader
+- The master node handles all writes, and these changes are replicated to read-only slave nodes
+- Salve can only serve read requests
+
+Multiple-Master Replication
+- Multiple node can accept writes and replicate changes to other masters
+
 #### 4. How is read-write consistency ensured in master-slave replication?
+Problem that addressed: The client writes data to the leader, and later read the data from a different replica(follower) shortly. If the follower hasn't yet received the data due the replication lag, the client might read stale data.
+
+Read-Your-Writes Consistency (Read-After-Write Consistency)
+
+Possible techniques:
+1. Write to leader, then read it from the leader. But cannot read every data from the leader, otherwise negating the effect of read replica.
+2. Track the time of last update, e.g. for one minute after the last update, make all reads from leaders
+3. Using timestamp: The client can remember the timestamp of its most recent write. It servers as the marker to determine whether the replica used for reading is up-to-date.
+
+Monotonic Reads
+Problem that addressed:
+- A user makes several reads from different replicas. For example, the first query returns a comment that was recently added, but the second query does not return anything because of lagging. 
+
+Possible techniques:
+1. Ensure that each client always makes their reads from the same replica. For example, the replica can be chosen based on a hash of userID
+
 #### 5. How are conflicts handled in multi-master replication?
+Scenario:
+- Each change is successfully applied to their local leader.
+
+Solution:
+1. Last Write Wins (LWW): The most recent update is accepted
+
 #### 6. What is log-based replication, and how is it implemented?
+Log-based Replication:
+- The leader keeps a log of all write operations and propagates these to followers
+- Followers process the log entries in the same sequence to replicate the data
+
+Types of Log-Based Replication:
+1. Statement-Based Replication
+- The leader records every SQL statement executed and sends this log to the followers
+- Limitation: Non-deterministic operation(e.g. `NOW()` or `RAND()`) can produce inconsistent results on replicas
+
+2. Write-Ahead Log (WAL)
+- In either log-structured storage engine or B-tree, the log is an append-only sequence of bytes containing all writes to the database.
+- Can be used to build a replica on another node
+- The leader can send it across the network to its followers. When the follower processes this log, it builds a copy of exact same data as found on the leader.
+- Limitation: WAL operates at low-level format by describing which bytes were changed in which disk blocks. This makes replication closely coupled to the storage engine.
+
+3. Logical (Row-Based) Replication
+- A sequence of records describing writes to database tables at the granularity of a row
+- The leader sends the result about the rows that were inserted, updated or deleted along with the actual data changes
+
 #### 7. What is a heartbeat mechanism, and how is it implemented?
+Heartbeat Mechanism
+- A regular signal sent between nodes to monitor the availability of nodes and detect failures
+
+Implementation
+1. Frequency: Heartbeats are sent at a fixed interval
+
 #### 8. What is data consistency, and how can it be ensured?
-#### 9. What is a distributed consistency algorithm, and what are the common algorithms?
-#### 10. What is the Raft algorithm, and how does it differ from the Paxos algorithm?
+Strong Consistency: Ensure that every read operation reflects the most recent write, regardless of which node the read is performed on
+Eventual Consistency: Guarantee that all replicas will eventually converge to the same state
+Quorum-based Consistency: Using a voting mechanism to ensure consistency by requiring a minimum number of replicas to agree on read/write operation
+
+Single-Leader System
+1. Strong Consistency:
+   - Achieved with synchronous replication
+
+Multi-Leader System
+Leaderless System
+
+Strong Consistency: Ensure that every read operation reflects the most recent write operations regardless of which node is accessed by the client
+Quorum-Based Consistency:
 
 ### Partitioning
 #### 1. What is partitioning in distributed systems?
+- Divide a large dataset into smaller subsets called partition that can be distributed across different nodes in a cluster
+- To improve scalability by allowing queries and updates to be handled in parallel
+
 #### 2. What are the benefits of partitioning in distributed systems?
+
+
+
 #### 3. What is the CAP theorem, and how does it explain partitioning in distributed systems?
 #### 4. What is quorum, and how does it play a role in partitioning within distributed systems?
-#### 5. What is the consistent hashing algorithm, and how does it help solve partitioning problems in distributed systems?
+#### 5. What is the consistent hashing algorithm (Partitioning by hash of key), and how does it help solve partitioning problems in distributed systems?
+- Refer to Partitioning by hash of key
+  - To distribute data evenly across multiple nodes or partitions in a distributed system
+
+- Problem it solves:
+1. Data is evenly distributed across partitions, ensuring no single node is overwhelmed
+2. High Throughput: By distributing keys across multiple partitions, the system can process queries in parallel
+  
 #### 6. What is the Gossip protocol, and how is it used to address partitioning issues in distributed systems?
 #### 7. What is partition tolerance, and how is it related to distributed system partitioning?
 
@@ -171,3 +262,25 @@
 #### 5. Under what circumstances does a timeout occur in the Two-Phase Commit Protocol?
 #### 6. What are a coordinator and participant in distributed systems?
 #### 7. How are conflicts between two coordinators resolved? 
+
+#### 8. What is a distributed consistency algorithm, and what are the common algorithms?
+Distributed Consistency Algorithm:
+- Used to maintain a consistent state across nodes in a distributed system
+- Handle network partitions, delays, and failures
+
+a. Two-Phase Commit (2PC)
+How It Works:
+- Prepare Phase: The coordinator asks all participants if they are ready to commit.
+- Commit Phase: If all participants agree, the coordinator instructs them to commit; otherwise, it aborts.
+
+b. Three-Phase Commit (3PC)
+How It Works:
+- Introduces a pre-commit phase to ensure participants can proceed safely.
+
+c. Paxos
+
+d. Raft
+
+e.
+
+#### 9. What is the Raft algorithm, and how does it differ from the Paxos algorithm?
