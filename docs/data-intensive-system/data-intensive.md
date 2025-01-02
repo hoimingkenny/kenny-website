@@ -6,7 +6,7 @@
 - SSD: For update data, must erase and rewrite large blocks
 -
 ### LSM
-#### 1. What is an LSM tree?
+#### 1. What is an LSM tree??
 - Log-Structured Merge-Tree
 - Designed to optimize write performance and handle large-scale data in systems where write operation are frequent.
 - Key features: 
