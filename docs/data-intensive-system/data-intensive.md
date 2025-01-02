@@ -231,8 +231,6 @@ Quorum-Based Consistency:
 
 #### 2. What are the benefits of partitioning in distributed systems?
 
-
-
 #### 3. What is the CAP theorem, and how does it explain partitioning in distributed systems?
 #### 4. What is quorum, and how does it play a role in partitioning within distributed systems?
 #### 5. What is the consistent hashing algorithm (Partitioning by hash of key), and how does it help solve partitioning problems in distributed systems?
@@ -248,7 +246,34 @@ Quorum-Based Consistency:
 
 ### Transactions
 #### 1. What are distributed system transactions?
+Transaction:
+- all the reads and writes in a transaction are executed as one operation: either the entire transaction succeeds (commit) or it fails (abort, rollback)
+
 #### 2. What are ACID properties, and how can they be ensured in distributed system transactions?
+Atomicity: Something that can not be broken down into smaller parts
+- Is not about concurrency (not describing what happens if several processes try to access the same data at the same time)
+- Is to describe what happen if a client want to make several writes but a fault occurs after some of the writes have been processed, for example network connection issue, full disk.
+- If the writes are grouped into atomic transaction, and the transaction is failed to commit then the transaction is aborted and the database must undo any writes it has made so far.
+- If a transaction is aborted, the application can be sure that it didn't change anything, so it can be safely retried
+- All-or-nothing
+
+Consistency
+- Refer to the database being in a valid state before and after a transaction, according to specific rules or invariants defined by the application
+- Property of the application not like A, I and D they are properties of the database
+- Rely on the database's atomicity and isolation properties to achieve consistency
+
+Isolation
+- Concurrency issue if several clients access the same database records
+- Concurrently executing transactions are isolated from each other
+- 如果一個transaction進行多次寫入，則另一個事務要麼看到全部寫入結果，要麼什麼都看不到
+- Database ensure that when the transactions have committed, the result is the same as if they had run serially (one after another), even though in reality they may have run concurrently
+- Serializable isolation is rarely used in practice, because it carries performance penalty
+
+Durability
+- A promise that once a transaction has committed successfully, any data it has written will not be forgotten, even if there is hardware fault or database crashes
+- In single-node database, durability means that the data has been written to nonvolatile storage such as hard drive or SSD. It usually has write-ahead log which allows recovery in the event that the data structure on disks are corrupted
+- In replicated database, durability means that the data has been copied to some number of nodes. In order to provide durability guarantee, a database must wait until these writes are complete before reporting a transaction as successfully committed
+
 #### 3. What are BASE properties, and how can they be ensured in distributed system transactions?
 #### 4. What is the Two-Phase Commit Protocol, and how can it be used to implement distributed system transactions?
 #### 5. What is the Three-Phase Commit Protocol, and how does it improve upon the Two-Phase Commit Protocol?
@@ -256,6 +281,15 @@ Quorum-Based Consistency:
 
 ### Consistency and Consensus
 #### 1. What types of consistency exist in distributed systems, and what are their differences?
+Linearizability
+- Known as atomic consistency, is a strong consistency model in distributed system
+- Provides the illusion that there is only one copy of the data, even if there are multiple replicas
+- A "recency guarantee" that ensures the value read is always the latest committed value, avoiding stale or outdated data
+- Example: Inconsistent views of sports scores across replicas (e.g., one client sees an updated score while another sees an outdated one) violate linearizability​
+- Implementing Linearizable System
+	- 1. Single-leader Replication(potentially linearizable): Ensure writes are performed on a leader and propagated to followers. If you make reads from leader or from synchronously updated followers
+	- 2. Consensus Algorithm: Being alike to single-leader replication but contain measures to prevent split brain and stale replicas
+
 #### 2. What is the Two-Phase Commit Protocol in distributed systems?
 #### 3. What is the purpose of the Two-Phase Commit Protocol?
 #### 4. What are the advantages and disadvantages of the Two-Phase Commit Protocol?
@@ -280,7 +314,5 @@ How It Works:
 c. Paxos
 
 d. Raft
-
-e.
 
 #### 9. What is the Raft algorithm, and how does it differ from the Paxos algorithm?
