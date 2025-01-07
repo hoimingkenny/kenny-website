@@ -103,6 +103,7 @@ Distributed algorithms are evaluated based on various attributes, such as:
 Safety is crucial in any system model, preventing irreversible errors and incorrect information returned to clients. Raft guarantees that logs replicated to a majority of nodes won't be rolled back, demonstrating the safety property. The eventual consistency achieved by Raft, where all nodes eventually reach the same state, represents the liveness property.
 
 Raft ensures the following properties:
+
 ![Safty that gurantees by Raft](./assets/raft/raft2.png)
 
 #### Election Safety
@@ -123,6 +124,7 @@ This relies on:
 
 Log matching is easy to maintain under normal conditions. However, node crashes complicate matters, as shown in a diagram:
 ![Safty that gurantees by Raft](./assets/raft/raft7.png)
+
 The diagram depicts six possible states (a-f) that a follower might have. 
 
 Both leaders and followers can crash, leading to these scenarios for a follower's log compared to the leader's:
@@ -178,35 +180,35 @@ Log replication constraints:
 - Matching log entries at a specific position across different nodes guarantee identical preceding log entries.
 - Raft never commits previous term log entries solely by counting replicas.
 
-### 5. Summary Question
-#### I. Leader Election
-##### 1. Provide a concise overview of the mechanism for leader election.
-##### 2. What roles exist in the Raft protocol, and what are their respective responsibilities?
-##### 3. What is leader election in the Raft protocol, and what happens if leader election fails?
-##### 4. How do Follower, Candidate, and Leader states transition in the Raft protocol?
-##### 5. What is a Term in the Raft protocol, and how is it used to ensure consistency?
-##### 6. How does the Raft protocol prevent performance degradation caused by excessive leader elections?
-##### 7. What is the heartbeat mechanism in the Raft protocol, and what is its purpose?
-##### 8. What is a Quorum in the Raft protocol, and what role does it play?
+## 4. Summary Question
+### I. Leader Election
+#### 1. Provide a concise overview of the mechanism for leader election.
+#### 2. What roles exist in the Raft protocol, and what are their respective responsibilities?
+#### 3. What is leader election in the Raft protocol, and what happens if leader election fails?
+#### 4. How do Follower, Candidate, and Leader states transition in the Raft protocol?
+#### 5. What is a Term in the Raft protocol, and how is it used to ensure consistency?
+#### 6. How does the Raft protocol prevent performance degradation caused by excessive leader elections?
+#### 7. What is the heartbeat mechanism in the Raft protocol, and what is its purpose?
+#### 8. What is a Quorum in the Raft protocol, and what role does it play?
 
-#### II. Log Replication
-##### 1. Provide a concise overview of the mechanism for log replication.
-##### 2. What is log compaction in the Raft protocol, and what is its purpose?
-##### 3. How does the Raft protocol handle log replication issues and resolve log conflicts?
-##### 4. How does the Raft protocol handle the dynamic addition and removal of nodes?
-##### 5. How does the Raft protocol process client requests?
+### II. Log Replication
+#### 1. Provide a concise overview of the mechanism for log replication.
+#### 2. What is log compaction in the Raft protocol, and what is its purpose?
+#### 3. How does the Raft protocol handle log replication issues and resolve log conflicts?
+#### 4. How does the Raft protocol handle the dynamic addition and removal of nodes?
+#### 5. How does the Raft protocol process client requests?
 
-#### III. Use Cases
-##### 1. What are the limitations of the Raft protocol, and in what scenarios is it not suitable for use?
+### III. Use Cases
+#### 1. What are the limitations of the Raft protocol, and in what scenarios is it not suitable for use?
 
-#### IV. Related Protocols
-##### 1. What are the strengths and weaknesses of the Raft protocol? How does it compare to other distributed consensus protocols?
-##### 2. What are the variants of the Raft protocol?
+### IV. Related Protocols
+#### 1. What are the strengths and weaknesses of the Raft protocol? How does it compare to other distributed consensus protocols?
+#### 2. What are the variants of the Raft protocol?
 
-#### Security and Fault Recovery
-##### 1. How does the Raft protocol prevent split-brain scenarios?
-##### 2. How does the Raft protocol handle node failures while ensuring data consistency remains unaffected?
-##### 3. What are the key safety properties of the Raft protocol, and how are they guaranteed?
+### V. Security and Fault Recovery
+#### 1. How does the Raft protocol prevent split-brain scenarios?
+#### 2. How does the Raft protocol handle node failures while ensuring data consistency remains unaffected?
+#### 3. What are the key safety properties of the Raft protocol, and how are they guaranteed?
 
 ## Reference
 1. Thesis Explanation: https://blog.csdn.net/qq_40586495/article/details/123035781
