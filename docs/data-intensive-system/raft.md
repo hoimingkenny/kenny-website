@@ -37,11 +37,21 @@ Under normal circumstances, there is only one leader, with other nodes as follow
 Raft uses a heartbeat mechanism to trigger leader elections. The state transition process is shown in a diagram.
 ![Safty that gurantees by Raft](./assets/raft/raft3.png)
 
-Here's a summary:
-- All nodes start as followers.
-- If a follower doesn't receive a heartbeat from the leader within a timeout period, it transitions to the candidate state, increments its term, and initiates an election.
-- If a candidate receives votes from a majority of nodes (including itself), it becomes the leader.
-- If a node discovers another node with a higher term, it transitions to the follower state.
+Keypoint:
+- All nodes start as followers
+- If a follower doesn't receive a heartbeat(AppendEntries RPCs that carry no log entries) from the leader within a timeout period(a.k.a election timeout), it transitions to the candidate state, increments its term, and initiates an election
+- If a candidate receives votes from a majority of nodes (including itself), it becomes the leader
+- Each server will vote for at most one candidate in a given term, on a first-come-first-served basis
+- Restriction: voter denies its vote if its own log is more up-to-date than that of the candidate
+  - Up-to-date: 
+    - If the logs have last entries with different terms, then the log with the later term is more up-to-date
+    - If the logs end with the same term, then whichever log is longer is more up-to-date
+- If a node discovers another node with a higher term, it transitions to the follower state
+- Once a candidate wins an election, it becomes leader. It then sends heartbeat messages to all of the other servers to establish its authority and prevent new election
+- While waiting for votes, a candidate may receive an AppendEntries RPC from another server claiming to be leader
+  - If the term in the RPC < candidate's current term -> the candidate rejects the RPC and continues in candidate state
+- If many followers become candidates at the same time -> Split Votes
+  - When this happens, each candidate will time out and start a new election by incrementing its term and initiating another round of RequestVote RPC
 
 #### Term
 - Time is divided into arbitrary-length terms numbered with consecutive integers
@@ -53,7 +63,7 @@ Here's a summary:
 - Candidates or leaders with an outdated term immediately revert to follower status. 
 - Nodes reject requests with outdated terms.
 
-#### Election Timeout
+#### Split Vote
 - If all followers simultaneously initiate elections upon timeout (due to voting for themselves), it could lead to a deadlock where no node secures a majority, resulting in repeated election failures.
 - To prevent this, Raft uses randomized election timeouts within a fixed interval (e.g., 150-300ms). This ensures that, in most cases, only one server detects a timeout and initiates an election before others, increasing its chances of winning.
 
@@ -195,6 +205,10 @@ Log replication constraints:
 #### 1. Provide a concise overview of the mechanism for log replication.
 #### 2. What is log compaction in the Raft protocol, and what is its purpose?
 #### 3. How does the Raft protocol handle log replication issues and resolve log conflicts?
+Log Matching Property
+- 
+
+
 #### 4. How does the Raft protocol handle the dynamic addition and removal of nodes?
 #### 5. How does the Raft protocol process client requests?
 
