@@ -205,10 +205,6 @@ Log replication constraints:
 #### 1. Provide a concise overview of the mechanism for log replication.
 #### 2. What is log compaction in the Raft protocol, and what is its purpose?
 #### 3. How does the Raft protocol handle log replication issues and resolve log conflicts?
-Log Matching Property
-- 
-
-
 #### 4. How does the Raft protocol handle the dynamic addition and removal of nodes?
 #### 5. How does the Raft protocol process client requests?
 
