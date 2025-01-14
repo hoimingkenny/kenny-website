@@ -116,6 +116,10 @@ Raft can even stay consistent in the face of network partitions.
 ## 常見問題
 ### 领导者选举
 1. 简练的语言概述领导者选举的机制
+當Follower收不到來自Leader的心跳時，便會變為Candidate發動選舉，並向自己投票。
+
+
+
 2. Raft协议中有哪些角色？分别负责什么任务？
 3. 在Raft协议中，什么是Leader选举？Leader选举失败怎么办？
 4. 在Raft协议中，Follower、Candidate和Leader分别是如何转换状态的？
