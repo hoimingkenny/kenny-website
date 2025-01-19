@@ -1,4 +1,4 @@
-# Raft Consensus Algorithm
+# Raft
 
 ## 1. Background
 ### What is Raft? 
@@ -23,8 +23,8 @@ Through the leader, Raft decomposes the consistency problem into three independe
 - **Log Replication**: The leader receives client-submitted logs, replicates them to other nodes in the cluster, and ensures their logs match the leader's.
 - **Safety**: Ensuring that if a server applies a log entry to its state machine, other servers cannot apply different entries at the same index, as illustrated in Figure 3.2.
 
-![Condensed Summary of Raft](./assets/raft/raft1.png)
-![Safty that gurantees by Raft](./assets/raft/raft2.png)
+![Condensed Summary of Raft](assets/raft/raft1.png)
+![Safty that gurantees by Raft](assets/raft/raft2.png)
 
 ## 3. Sub-Problem
 ### 1. Leader Election
@@ -35,7 +35,7 @@ In Raft, a node can be in one of three states:
 
 Under normal circumstances, there is only one leader, with other nodes as followers.
 Raft uses a heartbeat mechanism to trigger leader elections. The state transition process is shown in a diagram.
-![Safty that gurantees by Raft](./assets/raft/raft3.png)
+![Safty that gurantees by Raft](assets/raft/raft3.png)
 
 Keypoint:
 - All nodes start as followers
@@ -79,7 +79,7 @@ Two identical, deterministic processes starting in the same state and receiving 
 In simpler terms: **Same Initial State + Same Input = Same End State**
 
 Replicated logs are commonly used to implement replicated state machines, as shown in a diagram (not provided).
-![Safty that gurantees by Raft](./assets/raft/raft5.png)
+![Safty that gurantees by Raft](assets/raft/raft5.png)
 
 Each server has a log containing a series of commands, which the state machine executes sequentially. All logs store the same commands in the same order, ensuring each state machine processes identical instructions, resulting in consistent states and outputs.
 
@@ -100,7 +100,7 @@ The leader only needs to replicate the log to most nodes before responding to th
 - **Apply (applied)**: The state after a node applies the log to its state machine, affecting the node's state.
 
 Logs are organized as shown in a diagram:
-![Safty that gurantees by Raft](./assets/raft/raft6.png)
+![Safty that gurantees by Raft](assets/raft/raft6.png)
 
 Each entry stores a command and the leader's term number when it received the command. The term number helps detect inconsistencies, and an integer index allows for positioning.
 The diagram illustrates that the logs across five nodes are not perfectly consistent. To ensure high availability, **Raft uses eventual consistency instead of strong consistency**. The leader continuously sends log entries to followers until all nodes have identical entries.
@@ -114,7 +114,7 @@ Safety is crucial in any system model, preventing irreversible errors and incorr
 
 Raft ensures the following properties:
 
-![Safty that gurantees by Raft](./assets/raft/raft2.png)
+![Safty that gurantees by Raft](assets/raft/raft2.png)
 
 #### Election Safety
 Guaranteeing at most one leader per term is vital to prevent brain split, a serious issue that can lead to data loss due to multiple leaders in a replication set. Raft ensures this property through:
@@ -133,7 +133,7 @@ This relies on:
 - Consistency checks: In AppendEntries, the leader includes the term and index of the log entry preceding the latest one. If a follower can't find the log at the corresponding term and index, it informs the leader of the inconsistency.
 
 Log matching is easy to maintain under normal conditions. However, node crashes complicate matters, as shown in a diagram:
-![Safty that gurantees by Raft](./assets/raft/raft7.png)
+![Safty that gurantees by Raft](assets/raft/raft7.png)
 
 The diagram depicts six possible states (a-f) that a follower might have. 
 
@@ -163,7 +163,7 @@ This ensures that every elected leader holds the latest committed log.
 Once a log is successfully replicated to most nodes, the leader knows it can be committed. If the leader crashes before committing, the new leader attempts to complete the replication. However, a leader can't immediately deduce that entries from the previous term are committed.
 
 Below diagram illustrates a complex scenario:
-![Safty that gurantees by Raft](./assets/raft/raft8.png)
+![Safty that gurantees by Raft](assets/raft/raft8.png)
 
 - At time (a), s1 is the leader in term 2, committing a log entry only replicated to itself and s2 before crashing.
 - At time (b), s5 becomes the leader in term 3, replicates the log only to itself, and crashes.
