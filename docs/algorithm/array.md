@@ -1,6 +1,4 @@
-# Data Structure
-
-## Array
+# Array
 - 分為兩大類，一類Static Array，一類是Dynamic Array。
 - Static Array：Block of continuous memory space，可以通過indexing來訪問這塊內存空間中的元素。
 - Dynamic Array：底層還是static array，只是編程語言為了方便我們使用，在基礎上幫我們添加了一些常用的API，比如`push`， `insert`， `remove`等等的方法，可以讓我們更方便地操作數組元素。
@@ -64,17 +62,20 @@ Summary
 - 為什麼array expansion的Time Complexity O(N)沒加到addition中呢？
   - 因為expansion不是每次都會trigger的，所以擴容的complexity要用"Amortized Time Complexity"來分析
 
-## Linked List
-Why need linked list?
-- 鏈表跟array不一樣，不需要一整塊連續的內存空間存儲元素。元素們可以分佈在內存空間的任何一個地方，可通過節點上的`next`, `prev`指針，將零散的內存塊串聯起來形成鏈式結構。
-- Advantage1：提高內存的利用效率，沒有capacity limit(除了fill up了所有memory)
-- Advantage2：node可以隨時connect或remove，也不用考慮resizing或移動data
-- Limitation1: 不能用index去快速access elements
+### Circular Array
+- 利用modulus(remainder) operation，將普通array變成邏輯上的circular array，讓我們可以用O(1)的時間在數組頭部增刪元素
+- 維持了兩個pointer`start`和`end`，`start`指向第一個有效元素的index,`end`指向最後一個有效元素的下一個位置的index
+- 當增刪頭部元素時，只需要移動`start` index；當增刪尾部元素時，只需要移動`end` index 
+- 當`start`和`end`超出array boundary時(`<0` or `>= arr.length`)，可以用modulo operation`%`去讓它們轉一圈回到數組的頭部或尾部繼續
 
-### Single Linked List
-- 
+#### Code Implementation
+- 會使用left-closed和right-open interval，即`[start, end)`，因為最容易handle
+- 假設initialize `start=end=0`，interval `[0,0)`中沒有任何elements，但只要讓`end`向右移動(擴大)一位，區間`[0,1)`就只包含一個元素了
+- 如果區間兩邊都是open，即`(start, end)`，那麼讓`end`向右移動一位後，`(0,1)`仍然沒有元素
+- 如果區間兩邊都是closed，即`[0,0]`，就已經包含了一個元素，這兩種情怳都會為boundary handling帶來不必要的麻煩
 
 
-### Double Linked List
-- 
+
+
+
 
