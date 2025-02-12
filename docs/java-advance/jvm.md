@@ -1,26 +1,33 @@
 # JVM
 
-JVM基本介紹
+## JVM基本介紹
 - JVM是Java Virtual Machine的縮寫
 - 是類似于一台小電腦運行運行在windows or linux的操作環境下，直接和os交互，與硬件不交互，而os可以幫我們完成和硬件進行交互的工作
 
-Java文件是如何運行
-1. 類加載器
+## Java文件是如何運行
+1. Class Loader
 - 如果JVM想要執行一個.class文件，需要將其裝進一個類加載器，它像一個搬運工，將所有.class文件全部搬進JVM
 
-2. 方法區
+2. Method Area
 - 用于存放類似meta data，比如類信息，常量，static variable，編譯後的代碼
 - classloader將.class文件搬過來就是先丟到這一塊上
 
-3. 堆
-- 放一些存儲數據，比如對象實例，數組...等，它和方法區一樣都屬於thread共享區域，都是thread non-safe
+3. Heap
+- 用來store dynamically allocated objects，如用`new` create的object都會放到heap
+    - e.g instance of classes, arrays, and collections
+- heap中的objects可以share between多個方法的invocation
+- 和Method Area一樣都屬於thread共享區域，都是thread non-safe
+- Garbage collector會自動檢查和清理unreferenced objects
+- Instance variable都會儲存在heap
 
-4. 棧
-- 代碼的運行空間
-- 我們編寫的每一個方法都會放到棧裡運行
-- 本地方法棧 和 本地方法接口：它底層是用C來進行工作的，和Java沒太大的關係
+4. Stack
+- 代碼的運行空間，我們編寫的每一個方法都會放到棧裡運行
+- 另外local variables也會放到這裡
+    - Local variable: within limited scope, typically a function or block of code
+- 每一個thread都會有自己的stack，thread-safe
+- 如果local vairble point to一個object，the reference會store在stack，而實際的object會存在heap
 
-5. 程序計數器
+5. Program Counter Register
 - 類似一個指針，指向下一行我們需要執行的代碼，和棧一樣，是thread獨享的，每一個thread都會有自己對應的一塊區域而不會存在并發和multi-thread的問題
 
 簡單代碼例子
@@ -76,17 +83,11 @@ CC將無用對象從內存中卸載
     ```
 - 當嘗試運行時，我們的代碼肯定會報錯，因為在loading的時候是找到了rt.jar中的`java.lang.String`
 
-三，運行時數據區
+三，Runtime Data Areas
 - 比如Thread Class，它的starto方法帶有一個native修飾，而且不存在method body，這些是本地方法，使用C方法來實現的，一般這些方法都會放到本地方法棧的區域
 - Program Counter: 是一個指針，指向了程序中下一句需要執行的指令，它也是memory區域中唯一一個不會出現OutOfMemoryError的區域，而且佔用內存空間小到基本可以忽略不計。
 - 僅代表當前thread所執行的byte的行號指示器, byte解析器通過改變這個counter的值選取下一條需要執行的byte指令
 - 如果執行的是native方法，這個指針就不會工作了。
 
-
-
-
-
-
-
-
-
+##### Reference
+1. Heap and Stack: https://nus-cs2030s.github.io/2324-s2/10-heap-stack.html#__tabbed_1_3
