@@ -11,7 +11,7 @@
 ![bitcask insertion](static/hard_disk.png)
 
 ## Data Storage Process
-- OS use file system <-> Buffer Memory <-> DB(Hard Disk)
+- OS use file system -> Buffer Memory -> DB(Hard Disk)
 
 ## RAID
 - Data storage technology that combine multiple physical disk drives into single logical unit
