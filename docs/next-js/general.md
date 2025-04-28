@@ -11,6 +11,9 @@
 ##### Next.js
 - A React-based full-stack framework that support user to write both frontend and backend in the same project
 - Features: Server-Side Rendering(SSR), Built-in Routing(file system based routing), API Routing(APIs are created in pages/api directory)
+- App Route vs Page Route
+  - App Route: Uses app/ directory for routes
+  - Page Route: Uses pages/ directory for routes
 
 ##### Server Side Rendering 
 - Server renders HTML before sending it to the client
