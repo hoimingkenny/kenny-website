@@ -22,4 +22,7 @@ BUT standards suggest above behaviors, developers sometimes use these methods in
 
 Neither GET nor POST is inherently secure. GET parameters are visible in the URL, while POST bodies can be intercepted if not encrypted. To ensure secure data transmission, the use of HTTPS is advised.
 
-
+## HTTP vs HTTPS
+### Differences between HTTP and HTTPS
+- HTTP是超文本傳輸協議，信息是明文傳輸，存在data security的問題。HTTPS解決了HTTP不安全的缺陷，在TCP和HTTP網絡層之間加入了SSL/TLS安全協議，使得報文能夠加密傳輸。
+- HTTP連接建立相對簡單，TCP三次握手後便可以進行HTTP的Request Message傳輸，而HTTPS在TCP三次握手之後，還需要SSL/TLS的握手過程，才可進入Request Message傳輸。
