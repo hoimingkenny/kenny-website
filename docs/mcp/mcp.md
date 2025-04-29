@@ -99,7 +99,23 @@ npm run inspector
 curl -X POST https://flomoapp.com/iwh/MjI4MjczNA/0808e155c2ddd0763643ed3712e448b9/ -H 'Content-Type: application/json' -d '{"content": "Hello, flomo Im using API"}'
 ```
 
-{"code":0,"message":"\u5df2\u8bb0\u5f55","memo":{"creator_id":2282734,"source":"incoming_webhook","content":"<p>Hello, flomo Im using API<\/p>","tags":[],"updated_at":"2025-04-28 19:57:18","created_at":"2025-04-28 19:57:18","linked_memos":[],"linked_count":0,"slug":"MTczNjEyNTY0"}}%
+```
+{
+  "code":0,
+  "message":"\u5df2\u8bb0\u5f55",
+  "memo":{
+    "creator_id":2282734,
+    "source":"incoming_webhook",
+    "content":"<p>Hello, flomo Im using API<\/p>",
+    "tags":[],
+    "updated_at":"2025-04-28 19:57:18",
+    "created_at":"2025-04-28 19:57:18",
+    "linked_memos":[],
+    "linked_count":0,
+    "slug":"MTczNjEyNTY0"
+  }
+}
+```
 
 ### Fetch Memo
 - Not officially supported in Flomo
@@ -108,7 +124,3 @@ curl -X POST https://flomoapp.com/iwh/MjI4MjczNA/0808e155c2ddd0763643ed3712e448b
 ## Cursor Shortcut
 - CMD + K: Generate new code or edit existing code in the editor window
 - CMD + L: Open the chat
-
-
-
-
