@@ -20,7 +20,7 @@
 4. Container Management
     - Registers and tracks containers (e.g., totes, bags) by type, color, and reference code
     - Supports batch registration and RFID updates
-5. Sales Order Management
+5. Sales Order Manageemtn
     - Generates sales orders for WMS, specifying pick flow and warehouse
     - Handles updates, cancellations, and transfers
 6. Customer Service Opeartion
