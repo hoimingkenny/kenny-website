@@ -89,5 +89,107 @@ CC將無用對象從內存中卸載
 - 僅代表當前thread所執行的byte的行號指示器, byte解析器通過改變這個counter的值選取下一條需要執行的byte指令
 - 如果執行的是native方法，這個指針就不會工作了。
 
+### JVM
+
+#### Default Heap Allocation
+- 1/4 of memory for heap allocation by default
+
+
+```bash
+sh-5.1$ java -XshowSettings:vm -version
+Picked up JAVA_TOOL_OPTIONS: -javaagent:/opt/addons/apm-agent.jar -Xms256m -Xmx1344m -XX:MinHeapFreeRatio=20 -XX:MaxHeapFreeRatio=40
+VM settings:
+    Max. Heap Size (Estimated): 1.27G
+    Using VM: OpenJDK 64-Bit Server VM
+
+openjdk version "21.0.6" 2025-01-21 LTS
+OpenJDK Runtime Environment (Red_Hat-21.0.6.0.7-1) (build 21.0.6+7-LTS)
+OpenJDK 64-Bit Server VM (Red_Hat-21.0.6.0.7-1) (build 21.0.6+7-LTS, mixed mode, sharing)
+
+```
+
+#### Max. Heap Size
+```bash
+sh-5.1$ java -XX:+PrintFlagsFinal -version
+
+Picked up JAVA_TOOL_OPTIONS: -javaagent:/opt/addons/apm-agent.jar -Xms256m -Xmx1344m -XX:MinHeapFreeRatio=20 -XX:MaxHeapFreeRatio=40
+[Global flags]
+size_t MaxHeapSize                              = 1409286144                                {product} {command line}
+
+```
+
+#### How to set JVM Heap Size
+- It is always recommended to set 70% of total container memory been allocated of heap usage
+- e.g. Default 1024MB in memory
+  - JVM Heap Setting(70%) `-Xms716m -Xmx716m`
+
+#### How to set JVM Non-Heap Size(Metaspace)
+- JVM is the native application, and it also needs memory to maintain its internal data structures that represent application code, generated machine code, heap metadata, class metadata, internal profiling, etc. This is not accounted in Java heap, because most of those things are native, allocated in C heap, or mmap-ed to memory. JVM also prepares lots of things expecting the active long-running application with decent number of classes loaded, enough generated code created at runtime, etc.
+- e.g. Default 1024MB in memory
+  - JVM Heap Setting(70%) `-Xms716m -Xmx716m`
+  - Non-Heap Setting(30%) `-XX:MaxMetaSpaceSize=307m`
+
+#### Heap Dump JVM Setting
+`-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/tmp/oom.bin`
+
+#### How to take Heap Dump manually
+1. Identify the Applications' PID
+```bash
+# To identify the Application PID
+> ps -ef | grep java 
+
+```
+
+2. Generate Heap Dump
+```bash
+# jmap -dump:live,format=b,file=/tmp/heap_dump-<file_name>.bin <process_id>
+> jmap -dump:live,format=b,file=/tmp/heap-dump-ms-task.bin 15
+```
+
+#### How to take Heap Histogram manually 
+1. Identify the Applications' PID
+```bash
+# To identify the Application PID
+> ps -ef | grep java 
+
+```
+
+2. Generate Heap Histogram
+```bash
+# jmap -histo:live <process_id> > /tmp/heap_histo.txt 
+> jmap -histo:live 15 > /tmp/heap_histo.txt
+```
+
+#### Default GC Policy
+-XX:+UseSerialGC
+
+```bash
+sh-5.1$ java -XX:+PrintCommandLineFlags -version
+Picked up JAVA_TOOL_OPTIONS: -javaagent:/opt/addons/apm-agent.jar -Xms256m -Xmx1344m -XX:MinHeapFreeRatio=20 -XX:MaxHeapFreeRatio=40
+-XX:InitialHeapSize=268435456 -XX:MaxHeapFreeRatio=40 -XX:MaxHeapSize=1409286144 -XX:MinHeapFreeRatio=20 -XX:MinHeapSize=268435456 -XX:+PrintCommandLineFlags -XX:ReservedCodeCacheSize=251658240 -XX:+SegmentedCodeCache -XX:+UseCompressedOops -XX:+UseSerialGC 
+openjdk version "21.0.6" 2025-01-21 LTS
+OpenJDK Runtime Environment (Red_Hat-21.0.6.0.7-1) (build 21.0.6+7-LTS)
+OpenJDK 64-Bit Server VM (Red_Hat-21.0.6.0.7-1) (build 21.0.6+7-LTS, mixed mode, sharing)
+```
+
+#### How to take Heap Dump/Thread Dump manually using Spring Boot Actuator
+1. application.properties
+```bash
+management.endpoints.web.exposure.include=heapdump
+management.endpoints.web.exposure.include=threaddump
+```
+
+2. Go to Git Bash terminal
+```bash
+curl -k 'https://<MS Route URL>/actuator/heapdump' -O
+curl -k 'https://<MS Route URL>/actuator/threaddump' -i -X GET -H 'Accept: text/plain' > threaddump.txt
+```
+
+### OutOfMemoryError
+- `java.lang.OutOfMemoryError` exception is thrown when there is insufficient space to allocate an object in the Java heap
+- The GC cannot make space available to accommodate a new object, and the heap cannot be expanded further
+- Also, it may be thrown when there is insufficient native memory to support the loading of a Java class
+
+
 ##### Reference
 1. Heap and Stack: https://nus-cs2030s.github.io/2324-s2/10-heap-stack.html#__tabbed_1_3
