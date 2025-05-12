@@ -3,6 +3,9 @@ import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
+const lightCodeTheme = prismThemes.github; // Light theme
+const darkCodeTheme = prismThemes.dracula; // Dark theme
+
 
 const config: Config = {
   title: 'Tech Documentation',
@@ -31,16 +34,16 @@ const config: Config = {
     locales: ['en'],
   },
 
+  // themes: ['@docusaurus/theme-live-codeblock','@docusaurus/theme-mermaid'],
+
   presets: [
     [
       'classic',
       {
         docs: {
           sidebarPath: './sidebars.ts',
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+          remarkPlugins: [require('remark-math')],
+          rehypePlugins: [require('rehype-katex')],
         },
         blog: {
           showReadingTime: true,
@@ -68,7 +71,7 @@ const config: Config = {
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
     navbar: {
-      title: 'My Site',
+      title: 'ms-notes',
       logo: {
         alt: 'My Site Logo',
         src: 'img/logo.svg',
@@ -78,7 +81,7 @@ const config: Config = {
           type: 'docSidebar',
           sidebarId: 'tutorialSidebar',
           position: 'left',
-          label: 'Tutorial',
+          label: 'Notes',
         },
         {to: '/blog', label: 'Blog', position: 'left'},
         {
@@ -134,10 +137,43 @@ const config: Config = {
       copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
     },
     prism: {
-      theme: prismThemes.github,
-      darkTheme: prismThemes.dracula,
+      theme: lightCodeTheme,
+      darkTheme: darkCodeTheme,
+      additionalLanguages: ['java', 'yaml', 'bash'],
+      magicComments: [
+        // Remember to extend the default highlight class name as well!
+        {
+          className: 'theme-code-block-highlighted-line',
+          line: 'highlight-next-line',
+          block: {start: 'highlight-start', end: 'highlight-end'},
+        },
+        {
+          className: 'theme-code-block-highlighted-line',
+          line: 'Highlight next line',
+        },
+        {
+          className: 'code-block-error-line',
+          line: 'This will error',
+          block: {start: 'error-start', end: 'error-end'},
+        },
+      ],
     },
+    docs: {
+      sidebar: {
+        hideable: true,
+        autoCollapseCategories: true,
+      },
+    },
+    
   } satisfies Preset.ThemeConfig,
+
+  stylesheets: [
+    {
+      href: 'https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css',
+      type: 'text/css',
+      crossorigin: 'anonymous',
+    },
+  ],
 };
 
 export default config;
