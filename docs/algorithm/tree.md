@@ -54,6 +54,58 @@ void traverse(TreeNode root) {
 ### Level Order Traversal (BFS)
 - Level-order traversal visits nodes of a binary tree level by level, processing all nodes at the current depth (distance from the root) before moving to nodes at the next depth. Within each level, nodes are visited from left to right
 - Require the use of a queue data structure
+![BFS](https://labuladong.online/algo/images/dijkstra/1.jpeg)
+
+    1. Simplest Code Implementation
+        ```java
+        void levelOrderTraverse(TreeNode root) {
+            if (root == null) {
+                return
+            }
+            Queue<TreeNode> queue = new LinkedList<>();
+            q.offer(root);
+
+            while (!queue.isEmpty()) {
+                TreeNode cur = queue.poll();
+
+                if (cur.left != null) {
+                    q.offer(cur.left);
+                }
+                if (cur.right != null) {
+                    q.offer(cur.right);
+                }
+            }
+        }
+        ```
+
+    2. Add for-lop:
+        ```java
+            void levelOrderTraverse(TreeNode root) {
+                if (root == null) {
+                    return
+                }
+                Queue<TreeNode> queue = new LinkedList<>();
+                q.offer(root);
+
+                int depth = 1;
+
+                while (!queue.isEmpty()) {
+                    int size = q.size();
+                    for (int i = 0; i < size; i++) {
+                        TreeNode cur = q.poll();
+
+                        if (cur.left != null) {
+                        q.offer(cur.left);
+                    }
+                    if (cur.right != null) {
+                        q.offer(cur.right);
+                    }
+                }
+                depth++
+            }
+        ```
+
+
 
 ## N-ary Tree
 - Extension of binary tree
