@@ -1,5 +1,10 @@
 # Kafka
 
+## Core Concept
+### Producer
+- Message Buffer
+
+
 ## Producer
 1. What is the role of the acks parameter in Kafka Producers? What are its possible values
 	- Role: control the level of acknowledgment a Kafka producer requires from the broker before considering a message send successful. It balances reliability and performance
