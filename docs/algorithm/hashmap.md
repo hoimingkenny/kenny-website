@@ -24,7 +24,3 @@
     - 當有多個不同的`key` map到同一個index時，這些`key -> value`就會存儲在這個linked list
 - Solution2: Linear Probing(Open Addressing)
     - 如一個`key`算出來的index值已經被別的`key`佔了，那麼就去`index+1`的位置看看，如果還是被佔了，就繼續往後找，直到找到一個空位置為止
-
-#### Capacity Expansion & Load Factor
-
-

@@ -26,3 +26,6 @@
 - Access: The access token (JWT/opaque token) allows the application to access the protected resources on behalf of the customer
 - Session: A server-side session maintain the customer's state during their session
 
+## Why use auth code?
+- The client app never directly handles user credentials, minimizing exposure
+- the auth code is tied to the client's redirect URI and client ID, allowing the authorization server to verify the client's identity and ensure the request is legitmate before issuing an access token
