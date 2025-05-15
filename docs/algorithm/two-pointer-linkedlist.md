@@ -1,4 +1,4 @@
-# Two-Pointer
+# Two-Pointer (Linked List)
 
 1. LeetCode 21. Merge Two Sorted Lists
     - https://leetcode.com/problems/merge-two-sorted-lists/
@@ -190,6 +190,53 @@
         - Suppose the slow pointer has traveled k steps when fast and slow meet
         - it means fast has traveled 2k steps
         - the extra k step (2k - k) must be a multiple of the cycle's length
+
+7. LeetCode 160. Intersection of Two Linked Lists
+    - ![](https://labuladong.online/algo/images/linked-list-two-pointer/4.png)
+    - ![](https://labuladong.online/algo/images/linked-list-two-pointer/6.jpeg)
+
+    - If no intersection exists, the two pointers will meet at the end of the list (null)
+        - A: a1 -> a2 -> c1 -> c2 -> b1 -> b2 -> b3 -> c3 -> c4 -> null
+        - B: b1 -> b2 -> b3 -> c3 -> c4 -> a1 -> a2 -> c1 -> c2 -> null
+
+8. LeetCode 82. Remove Duplicates from Sorted List II
+    - 分解為two linked lists: 1) Unique List 2) Duplicated List
+    - then return the head of unique list
+
+    - what is duplicate?
+        - the value of current node equals the value of next node
+        - the value of current node = the value of last node in duplicate list
+
+    ```java
+        public ListNode deleteDuplicates(ListNode head) {
+            // / 运用虚拟头结点技巧，题目说了 node.val <= 100，所以用 101 作为虚拟头结点
+            ListNode dummyUniq = new ListNode(101);
+            ListNode dummyDup = new ListNode(101);
+
+            ListNode pUniq = dummyUniq, pDup = dummyDup;
+            ListNode p = head;
+
+            while (p != null) { 
+                if ((p.next != null && p.val == p.next.val) || p.val == pDup.val) {
+                    // 发现重复节点，接到重复链表后面
+                    pDup.next = p;
+                    pDup = pDup.next;
+                } else {
+                    // 不是重复节点，接到不重复链表后面
+                    pUniq.next = p;
+                    pUniq = pUniq.next;
+                }
+
+                p = p.next;
+                // 将原链表和新链表断开
+                pUniq.next = null;
+                pDup.next = null;
+            }
+
+            return dummyUniq.next;
+        }
+    ```
+        
 
 
 ## Reference
