@@ -133,7 +133,64 @@
     - Fast pointer: move two steps at a time
     - Because **`fast` moves twice as fast**, when `fast` reaches the end, `slow` will be in the middle.
 
+6. Detect Cycle in Ring
+    - Use above technique
+    - Linked List with Ring: it does not end with `null`
+    - If fast pointer **can reach the end of list(i.e. `null`)** -> the list has no cycle
+    - If the fast pointer catches up the slow pointer (meet at the same node), it means the fast pointer has looped around in a cycle
+
+    ```java
+        public boolean hasCycle(ListNode head) {
+        // 快慢指针初始化指向 head
+        ListNode slow = head, fast = head;
+        // 快指针走到末尾时停止
+        while (fast != null && fast.next != null) {
+            // 慢指针走一步，快指针走两步
+            slow = slow.next;
+            fast = fast.next.next;
+            // 快慢指针相遇，说明含有环
+            if (slow == fast) {
+                return true;
+            }
+        }
+        // 不包含环
+        return false;
+    }
+    ```
+
+    - LeetCode 142. Linked List Cycle
+        - https://leetcode.cn/problems/linked-list-cycle-ii/
+        ```java
+            public ListNode detectCycle(ListNode head) {
+                ListNode fast, slow;
+                fast = slow = head;
+                while (fast != null && fast.next != null) {
+                    fast = fast.next.next;
+                    slow = slow.next;
+                    if (fast == slow) break;
+
+                }
+                // 上面的代码类似 hasCycle 函数
+                if (fast == null || fast.next == null) {
+                    // fast 遇到空指针说明没有环
+                    return null;
+                }
+
+                // 重新指向头结点
+                slow = head;
+
+                // 快慢指针同步前进，相交点就是环起点
+                while (slow != fast) {
+                    fast = fast.next;
+                    slow = slow.next;
+                }
+                return slow;
+            }
+        ```
+        - Suppose the slow pointer has traveled k steps when fast and slow meet
+        - it means fast has traveled 2k steps
+        - the extra k step (2k - k) must be a multiple of the cycle's length
 
 
 ## Reference
-- https://labuladong.online/algo/essential-technique/linked-list-skills-summary/
+- https://labuladong.online/algo/essential-technique/linked-list-skills-summary/~
