@@ -96,6 +96,29 @@ Topic（主题）
 
 
 ## Partition
+1. What is the role of partitions in Kafka? Why are they needed?
+	- Role: Each topic is divided into multiple partitions, allowing data to be distributed across broker
+	- Key Function
+		1. Parallelism: Enable multiple consumers to process messages concurrently, improving throughput
+		2. Scalability: Data is spread across brokers
+		3. Fault Tolerance: Each partition can be replicated to multiple brokers, ensuring data availability if a broker fails
+	- Why needed?
+		- Without partition, Kafka would process message sequentially, limiting throughput and scalability
+		- Partition allow Kafka to distribute load, store data efficently and support high-performance fault-tolerant system
+
+2. How do you determine the number of partitions for a Kafka topic?
+	- Throughput Requirements: Estimate the messages/second
+	- Consumer Parallelism: The number of partitions should match or exceed the number of consumers in consumer group
+	- Broker Resources: Each partition consumes resources
+	- Latency: More partitions, more latency due to coordination overhead. Avoid over-partitioning for low-latency use cases
+
+3. How to Leader and Follower work in Kafka partition
+	- s
+
+
+
+
+
 Partition（分区）
 	1:Kafka分区的作用是什么？为什么需要分区？
 	2:如何确定Kafka主题的分区数？

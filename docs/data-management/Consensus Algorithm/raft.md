@@ -220,6 +220,16 @@ Log replication constraints:
 #### 2. How does the Raft protocol handle node failures while ensuring data consistency remains unaffected?
 #### 3. What are the key safety properties of the Raft protocol, and how are they guaranteed?
 
+### VI. Optimization
+#### ReadIndex
+- Allow clients to read consistent data from the leader without waiting for a full commit
+
+
+#### Prevote
+- Faster recoveryy from leader failures by reducing unnecessary votes or invalid election attempts
+- 
+
+
 ## Reference
 1. Thesis Explanation: https://blog.csdn.net/qq_40586495/article/details/123035781
 2. Thesis Explanation2: https://www.cnblogs.com/linbingdong/p/6442673.html
