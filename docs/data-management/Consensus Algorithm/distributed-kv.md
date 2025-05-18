@@ -31,18 +31,3 @@
   2. ReadIndex: Return consistent data index, ensuring clients read the latest consistent data while avoiding unnecessary synchronization overhead
   3. Prevote: Reduces invalid votes during leader election, speeding up election of new leader and minimizing service interruptions caused by leader changes
 
-## Design
-### Data Partition 
-#### Consistent Hashing
-
-#### Data Distribution & Replication
-
-#### Change in Node
-
-### 單機Storage Engine
-#### LSM Tree
-#### Hash Table
-#### B+ Tree
-#### Selection of Storage Engine
-
-
