@@ -1,6 +1,6 @@
 # Two-Pointer (Linked List)
 
-1. LeetCode 21. Merge Two Sorted Lists
+### 1. LeetCode 21. Merge Two Sorted Lists
     - https://leetcode.com/problems/merge-two-sorted-lists/
     - Use dummy node
     :::note Important
@@ -16,12 +16,14 @@
             ...
 
             return dummy.next;
+        }
     ```
 
-2. LeetCode 86. Partition List
+### 2. LeetCode 86. Partition List
     - https://leetcode.com/problems/partition-list/
     - Merging two in-ordered linkedlist
-    ```java
+
+    ```java showLineNumbers
         public ListNode partition(ListNode head, int x) {
             // to store Node < x
             ListNode dummy1 = new ListNode(-1);
@@ -56,7 +58,7 @@
         要將原linked list的node斷關
     :::
 
-3. LeetCode 23. Merge k Sorted Lists
+### 3. LeetCode 23. Merge k Sorted Lists
     - https://leetcode.com/problems/merge-k-sorted-lists/
     ```java
         public ListNode mergeKLists(ListNode[] lists) {
@@ -70,7 +72,7 @@
             // 遍历队列，将队列中的Head加入链表
             for (ListNode head : lists) {
                 if (head != null) {
-                    pq.add(head);
+                    pq.offer(head);
                 }
             }
 
@@ -93,7 +95,7 @@
         - All nodes are traversed once, so the time complexity of `while` loop is O(N).
     :::
 
-4. LeetCode 19. Remove Nth Node From End of List
+### 4. LeetCode 19. Remove Nth Node From End of List
     ```java
         public ListNode removeNthFromEnd(ListNode head, int n) {
             // 虚拟头结点
@@ -127,13 +129,13 @@
         - Let say we have  a linked list: 1 -> 2 -> 3 -> 4 -> 5, and you are required to delete the 5th node from the end.
         - In this case, you need to find the 6th node from the head, which is not possible.
 
-5. LeetCode 876. Middle of the Linked List
+### 5. LeetCode 876. Middle of the Linked List
     - https://leetcode.cn/problems/middle-of-the-linked-list/description/
     - Slow pointer: move one step at a time
     - Fast pointer: move two steps at a time
     - Because **`fast` moves twice as fast**, when `fast` reaches the end, `slow` will be in the middle.
 
-6. Detect Cycle in Ring
+### 6. Detect Cycle in Ring
     - Use above technique
     - Linked List with Ring: it does not end with `null`
     - If fast pointer **can reach the end of list(i.e. `null`)** -> the list has no cycle
@@ -191,7 +193,7 @@
         - it means fast has traveled 2k steps
         - the extra k step (2k - k) must be a multiple of the cycle's length
 
-7. LeetCode 160. Intersection of Two Linked Lists
+### 7. LeetCode 160. Intersection of Two Linked Lists
     - ![](https://labuladong.online/algo/images/linked-list-two-pointer/4.png)
     - ![](https://labuladong.online/algo/images/linked-list-two-pointer/6.jpeg)
 
@@ -199,7 +201,7 @@
         - A: a1 -> a2 -> c1 -> c2 -> b1 -> b2 -> b3 -> c3 -> c4 -> null
         - B: b1 -> b2 -> b3 -> c3 -> c4 -> a1 -> a2 -> c1 -> c2 -> null
 
-8. LeetCode 82. Remove Duplicates from Sorted List II
+### 8. LeetCode 82. Remove Duplicates from Sorted List II
     - 分解為two linked lists: 1) Unique List 2) Duplicated List
     - then return the head of unique list
 
@@ -237,8 +239,206 @@
         }
     ```
         
-9. LeetCode 264. Ugly Number II
-    - 
+### 9. LeetCode 264. Ugly Number II
+    - Ugly Number: with prime factors only 2, 3, 5
+    - Expected linked list: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 8 -> ...
+    - Think it as linked list
+        - 2: 1 -> 1*2 -> 2*2 -> 3*2 -> ...
+        - 3: 1 -> 1*3 -> 2*3 -> 3*3 -> ...
+        - 5: 1 -> 1*5 -> 2*5 -> 3*5 -> ...
+    - 把這3條有序的linked list合併，need to remove duplicated value, e.g. 2*3 and 3*2
 
+
+    ```java
+        public int nthUglyNumber(int n) {
+            // pointer to the head of each linked list
+            int p2 = 1, p3 = 1, p5 = 1;
+            // the value of the head node of each linked list
+            int product2 = 1, product3 = 1, product5 = 1;
+            // the final merged linked list
+            int[] ugly = new int[n + 1];
+            // the pointer to the merged linked list
+            int p = 1;
+
+            while (p <= n) { 
+                int min = Math.min(product2, Math.min(product3, product5));
+
+                // add the result list
+                ugly[p] = min;
+                p++;
+
+                // if the node is selected from the 2nd list, then move the pointer to the next node in 2nd list
+                // if the value of head node of any other list  is equal to the value of the selected node, then move the pointer to the next node in that list
+
+                if (min == product2) {
+                product2 = 2 * ugly[p2];
+                p2++;
+                }
+                if (min == product3) {
+                    product3 = 3 * ugly[p3];
+                    p3++;
+                }
+                if (min == product5) {
+                    product5 = 5 * ugly[p5];
+                    p5++;
+                }
+            }
+
+            return ugly[n];
+        }
+    ```
+
+### 10. LeetCode 378. Kth Smallest Element in a Sorted Matrix
+    - n: the size of the n x n matrix
+    - k: the position of the desired element (1 ≤ k ≤ n²)
+
+    ```java showLineNumbers
+        public int kthSmallest(int[][] matrix, int k) {
+            PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> {
+            // 按照元素大小升序排序
+                return a[0] - b[0];
+            });
+
+            for (int i = 0; i < matrix.length; i++, i++) {
+                pq.offer(new int[]{matrix[i][0], i, 0});
+            }
+
+            // loop k times
+            while (!pq.isEmpty() && k > 0) {
+                int[] cur = pq.poll();
+                res = cur[0];
+                k--;
+
+                int i = cur[i], j = cur[j];
+                if (j + 1 < matrix[0].length) {
+                    pq.add(new int[]{matrix[i][j + 1], i, j + 1})
+                }
+            }
+
+            return res;
+        }
+    ```
+    - Array of Priority Queue: `{matrix[i][j], i, j}`, value, row index, column index
+    - Time Complexity:
+        1. Line 7-9: n insertion x O(log n) = O(n log n)
+            - Insertion into heap: O(log n)
+        2. Line 12-21
+        - poll():  O(log n)
+        - At most 1 add: O(log n) (only if the row has more elements)
+        - Total per iteration: O(log n) + O(log n) = O(log n)
+        - Total for k iterations: O(k log n)
+
+    - Combined: O(n log n + k log n)
+    - Since k ≤ n² (the matrix has n² elements), the worst case occurs when k = n²:
+        - O(n log n + n² log n) = O(n² log n)
+    - However, we typically express the complexity as O(n log n + k log n) to show how it depends on both n (matrix size) and k (number of elements to process). This highlights that:
+        - For small k, the k log n term is small, making the algorithm efficient
+        - For large k (up to n²), the k log n term dominates
+
+### 11. LeetCode 373. Find K Pairs with Smallest Sums
+    - https://leetcode.com/problems/find-k-pairs-with-smallest-sums/
+    - Variant of LeetCode 23. Merge K Sorted Lists
+    - The pairs are ordered by sum in ascending order, so we can use 23. Merge K Sorted Lists to solve this problem to loop the first kth pairs
+    ```java
+        nums1 = [1,7,11], nums2 = [2,4,6]
+
+        1: [1, 2] -> [1, 4] -> [1, 6]
+        2: [7, 2] -> [7, 4] -> [7, 6]
+        3: [11, 2] -> [11, 4] -> [11, 6]
+    ```
+    ```java
+        public List<List<Integer>> kSmallestPairs(int[] nums1, int[] nums2, int k) {
+            PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> {
+                return (a[0] + a[1]) - (b[0] + b[1]);
+            });
+
+            // add the head node of each list
+            for (int i = 0; i < nums1.length; i++) {
+                pq.offer(new int[]{nums1[i], nums2[0], 0});
+            }
+            
+            // process the whole linked list
+            List<List<Integer>> res = new ArrayList<>();
+            while(!pq.isEmpty() && k > 0) {
+                int[] cur = pq.poll();
+                k--;
+
+                int nextIndex = cur[2] + 1;
+                if (nextIndex < nums2.length) {
+                    pq.add(new int[]{cur[0], nums2[nextIndex], nextIndex});
+                }
+
+                List<Integer> list = new ArrayList<>();
+                pair.add(cur[0]);
+                pair.add(cur[1]);
+                res.add(pair);
+            }
+            return res;
+        }
+    ```
+    - The triple: `(nums1[i], nums2[i], i)`
+    - i is used to record the index of nums2 for generating next node
+
+### 12. LeetCode 2. Add Two Numbers
+
+    - Start from 個位，align with our calculation of addition
+    - `carry`: used to handle 進位
+    - Need to use Math.floor() and mod
+    ```java
+        public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+            let p1 = l1, p2 = l2;
+            let dummy = new ListNode(-1);
+            let p = dummy;
+
+            let carry = 0;
+            while (p1 != null || p2 != null || carry > 0) {
+                let sum = carry;
+                if (p1 != null) {
+                    sum += p1.val;
+                    p1 = p1.next;
+                }
+
+                if (p2 != null) {
+                    sum += p2.val;
+                    p2 = p2.next;
+                }
+
+                carry = Math.floor(sum / 10);
+                sum = sum % 10;
+                p.next = new ListNode(sum);
+                p = p.next;
+            }
+
+            return dummy.next;
+        }
+    ```
+
+### 13. LeetCode 206. Reverse Linked List
+    - Reverse the direction of each node
+    - Initilization
+        - `pre = null`:
+        - `cur = head`:
+        - `nxt = head.next`:
+    ```java
+        ...
+        while (cur != null) {
+            cur.next = pre;
+            pre = cur;
+            cur = nxt;
+
+            if (nxt != null) {
+                nxt = nxt.next;
+            }
+        }
+        ...
+    ```
+
+### 14. LeetCode 445. Add Two Numbers II
+    - 不可用reverse linked list的方法
+    - instead, use Stack, FILO
+    - Then use method in 2. Add Two Numbers 
+
+### 15. LeetCode 234. Palindrome Linked List
+    
 ## Reference
 - https://labuladong.online/algo/essential-technique/linked-list-skills-summary/~
