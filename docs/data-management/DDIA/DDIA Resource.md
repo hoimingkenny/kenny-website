@@ -2,4 +2,4 @@
 
 ## Reference
 - https://ddia.qtmuniao.com/
-- https://ddia.pigsty.io/
+- https://ddia2.pigsty.io/#/zh-tw/README
