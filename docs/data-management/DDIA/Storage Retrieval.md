@@ -1,4 +1,5 @@
-# I. Storage and Retrieval
+# Storage and Retrieval
+
 ### Bitcask
 - 與Dictionary很相似，通常都是用hash table實現的
 - 假設我們的數據存儲只是一個加寫入的文件，使用in-memory hash map，每個key都map到一個數據文件的byte offset，指明可以找到對應值的位置。
@@ -51,12 +52,5 @@
 
 ### B-Tree
 - 
-
-
-
-
-
-
-
 
 
