@@ -6,11 +6,11 @@
 3. When to update result?
 
 
-## Why sliding window cannot list out all subarries?
+### Why sliding window cannot list out all subarries?
 - 本身是不能窮舉所有sub arraries
 - 不需要窮舉就可以找到答案
 
-## Template
+### Template
 ```java showlinenumbers
     void slidingWindow(String s) {
         Object window = ...
@@ -32,7 +32,7 @@
 ```
 - Is O(N), because 每個元素只會進入窗口一次，然後被移出一次
 
-## Step
+### Step
 1. `[left, right)`:
 - if `left = right = 0`, 區間`[0, 0)`中沒有元素，但只要right向右移一位，區間`[0, 1)`就有一個element了
 2. Increase right until the elements in windows include what in T
@@ -126,26 +126,45 @@
     ```
     - Maintain fixed size window, size as `t.length()`
 
-### LeetCode 438. Find All Anagrams in a String
+### LeetCode 438. Find All Anagrams in a String (Medium)
     ```java
         public List<Integer> findAnagrams(String s, String t) {
-            ...
+            List<Integer> res = new ArrayList<>();
 
-            while (right - left >= t.length()) {
-                // 当窗口符合条件时，把起始索引加入 res
-                if (valid == need.size()) {
-                    res.add(left);
-                }
-                char d = s.charAt(left);
-                left++;
-                // 进行窗口内数据的一系列更新
-                if (need.containsKey(d)) {
-                    if (window.get(d).equals(need.get(d))) {
-                        valid--;
-                    }
-                    window.put(d, window.get(d) - 1);
-                }
+            Map<Character, Integer> window = new HashMap<>();
+            Map<Character, Integer> need = new HashMap<>();
+            for (char c : p.toCharArray()) {
+                need.put(c, need.getOrDefault(c, 0) + 1);
             }
+
+            int valid = 0;
+            int left = 0, right = 0;
+            while (right < s.length()) {
+                char c = s.charAt(right);
+                right++;
+
+                if (need.containsKey(c)) {
+                    window.put(c, window.getOrDefault(c, 0) + 1);
+
+                    if (window.get(c).equals(need.get(c))) {
+                        valid++;
+                    }
+                }
+                while (right - left >= t.length()) {
+                    // 当窗口符合条件时，把起始索引加入 res
+                    if (valid == need.size()) {
+                        res.add(left);
+                    }
+                    char d = s.charAt(left);
+                    left++;
+                    // 进行窗口内数据的一系列更新
+                    if (need.containsKey(d)) {
+                        if (window.get(d).equals(need.get(d))) {
+                            valid--;
+                        }
+                        window.put(d, window.get(d) - 1);
+                    }
+                }
         }
     ```
 

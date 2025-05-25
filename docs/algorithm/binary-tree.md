@@ -60,6 +60,104 @@
 - 把队列中的所有节点都出队，再把当前节点的左右子节点加入队列
 
 
+## Post-order Position 
+### LeetCode 110. Balanced Binary Tree（Easy)
+    #### Idea
+        - 每一個node的左右子榭的深度差
+    ####  Code
+        ```java showLineNumbers
+            public boolean isBalanced(TreeNode root) {
+                if (root == null) return true;
+                if (checkHeight(root) == -1) return false;
+
+                return true;
+            }
+
+            int checkHeight(TreeNode root) {
+                if (root == null) return 0;
+
+                int leftHeight = checkHeight(root.left);
+                int rightHeight = checkHeight(root.right);
+                
+                if (leftHeight == -1 || rightHeight == -1) return -1;
+                if (Math.abs(leftHeight - rightHeight) > 1)  return -1;
+
+                return Math.max(leftHeight, rightHeight) + 1;
+            }
+        ```
+### LeetCode 543. Diameter of Binary Tree（Easy)
+    #### Idea
+        - 找一個節點的左右子樹最大深度之和
+    #### Code (Slow)
+        ```java showLineNumbers
+            class Solution {
+                // 记录最大直径的长度
+                int maxDiameter = 0;
+
+                public int diameterOfBinaryTree(TreeNode root) {
+                    // 对每个节点计算直径，求最大直径
+                    traverse(root);
+                    return maxDiameter;
+                }
+
+                // 遍历二叉树
+                void traverse(TreeNode root) {
+                    if (root == null) {
+                        return;
+                    }
+                    // 对每个节点计算直径
+                    int leftMax = maxDepth(root.left);
+                    int rightMax = maxDepth(root.right);
+                    int myDiameter = leftMax + rightMax;
+                    // 更新全局最大直径
+                    maxDiameter = Math.max(maxDiameter, myDiameter);
+                    
+                    traverse(root.left);
+                    traverse(root.right);
+                }
+
+                // 计算二叉树的最大深度
+                int maxDepth(TreeNode root) {
+                    if (root == null) {
+                        return 0;
+                    }
+                    int leftMax = maxDepth(root.left);
+                    int rightMax = maxDepth(root.right);
+                    return 1 + Math.max(leftMax, rightMax);
+                }
+            }
+        ```
+        - `traverse`
+            - Recursively visits every node in the tree.
+            - For each node, it:
+                - Calls maxDepth on the left and right subtrees to compute their depths.
+    #### Code (Fast)
+    ```java  showLineNumbers
+        class Solution {
+            // 记录最大直径的长度
+            int maxDiameter = 0;
+
+            public int diameterOfBinaryTree(TreeNode root) {
+                maxDepth(root);
+                return maxDiameter;
+            }
+
+            int maxDepth(TreeNode root) {
+                if (root == null) {
+                    return 0;
+                }
+                int leftMax = maxDepth(root.left);
+                int rightMax = maxDepth(root.right);
+                // 后序位置，顺便计算最大直径
+                int myDiameter = leftMax + rightMax;
+                maxDiameter = Math.max(maxDiameter, myDiameter);
+
+                return 1 + Math.max(leftMax, rightMax);
+            }
+        }
+    ```
+    - The maxDepth method is called exactly once for each node in the tree during the post-order traversal
+
 
 ## Mindset
 :::important
