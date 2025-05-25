@@ -52,6 +52,10 @@
     // ...
 ```
 
+## II. threeSum
+### Idea
+    - 第一個數字，`nums`中每一個元素
+    - 確定了第一個數字後，我們要找兩個數字，使得它们的和为 target - nums[i]，用2Sum 解決
 
 
 ## Reference

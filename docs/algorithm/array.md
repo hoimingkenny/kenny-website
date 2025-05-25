@@ -204,3 +204,22 @@ public class CycleArray<T> {
     }
 }
 ```
+
+### Problem
+#### 1. 121. Best Time to Buy and Sell Stock
+    ```java showLineNumbers
+        public int maxProfit(int[] prices) { 
+            int buy = Integer.MAX_VALUE;
+            int maxProfit = 0;
+
+            for (int price: prices) {
+                if (price < buy) {
+                    buy = price;
+                }
+                maxProfit = Math.max(maxProfit, price - buy);
+            }
+
+            return maxProfit;
+        }
+    ```
+#### 2. 

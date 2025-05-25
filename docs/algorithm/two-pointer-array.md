@@ -71,13 +71,17 @@
 ### Palindrome
 #### LeetCode 5. Longest Palindromic Substring
     - 回文串： 正著讀和反著讀都一樣的string, e.g. "abba" and "aba"
-    - 如果回文串的長度係odd number, 有一個中心字符
-    - 如果回文串的長度係even number, 兩個中心字符
-    - Main Function: longestPalindrome
-        - Iterate through each index `i` in the string
-        - For each `i`:
-            - **Check for an odd-length palindrome centered at `s[i]`**
-            - **Check for an even-length palindrome centered at `s[i]` and `s[i+1]`**
+
+    :::important
+        - 如果回文串的長度係odd number, 有一個中心字符
+        - 如果回文串的長度係even number, 兩個中心字符
+        - Main Function: longestPalindrome
+            - Iterate through each index `i` in the string
+            - For each `i`:
+                - **Check for an odd-length palindrome centered at `s[i]`**
+                - **Check for an even-length palindrome centered at `s[i]` and `s[i+1]`**
+    :::
+    
     - Helper Function: palindrome
         - Expands around a given center (`l`, `r`) to find the longest palindrome
         - Return the palindrome substring

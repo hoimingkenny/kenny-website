@@ -135,7 +135,7 @@
     - Fast pointer: move two steps at a time
     - Because **`fast` moves twice as fast**, when `fast` reaches the end, `slow` will be in the middle.
 
-### 6. Detect Cycle in Ring
+### 6. LeetCode 141. Linked List Cycle
     - Use above technique
     - Linked List with Ring: it does not end with `null`
     - If fast pointer **can reach the end of list(i.e. `null`)** -> the list has no cycle
