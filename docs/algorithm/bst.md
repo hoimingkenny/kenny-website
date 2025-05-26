@@ -25,3 +25,16 @@ TreeSet是TreeMap的封裝
 `selectKey`: return the key at the given index
 `rank`: return the index of the given key
 
+## Template
+```java
+    void BST(TreeNode root, int target) {
+        if (root.val == target)
+            // do something
+        if (root.val < target) {
+            BST(root.right, target);
+        }
+        if (root.val > target) {
+            BST(root.left, target);
+        }
+    }
+```

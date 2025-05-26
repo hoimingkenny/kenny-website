@@ -199,6 +199,7 @@
         }
     ```
     - Condition to shrink the window: When window contains duplicate elements
+    - why return `right - left`? because of right++
 
 ### LeetCode 1658. Minimum Operations to Reduce X to Zero
     - 從邊界del sum為x的元素
