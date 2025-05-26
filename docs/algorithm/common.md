@@ -42,3 +42,11 @@
     }
     return sb.toString();
 ```
+
+## Priority Queue
+```java showLineNumbers
+    PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> {
+        // 按照元素大小升序排序
+        return a[0] - b[0];
+    });
+```
