@@ -189,6 +189,9 @@
     }
 ```
 
+
+
+
 ### LeetCode 236. Lowest Common Ancestor of a Binary Tree（Medium)
 #### Idea
     - 如果一個節點能夠在它左右子數中分別找到`p` and `q`，該節點為LCA
