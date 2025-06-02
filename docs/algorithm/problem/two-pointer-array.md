@@ -33,7 +33,6 @@
 - Termination Condition: `left = right`
 
 ### Code
-#### LeetCode 167. Two Sum II - Input Array Is Sorted
 ```java showLineNumbers
     public int[] twoSum(int[] numbers, int target) {
         int left = 0, right = numbers.length - 1;
