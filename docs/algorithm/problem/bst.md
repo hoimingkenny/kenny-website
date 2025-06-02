@@ -56,3 +56,17 @@
             return root;
         }
     ```
+
+## LeetCode 230. Kth Smallest Element in a BST
+### Idea
+－ In-order traversal of BST = node value in ascending order
+
+     3
+    / \
+    2   4
+   /
+  1   
+
+
+  7, 9 , 4 10
+
