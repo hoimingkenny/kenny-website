@@ -1,3 +1,7 @@
+import Highlight from '@site/src/components/Highlight'
+import Warn from '@site/src/components/Warn'
+import Term from '@site/src/components/Term'
+
 # Game Shop
 
 ## Structure
