@@ -367,4 +367,6 @@ import Term from '@site/src/components/Term'
 ### . Describe the differences between a process and a thread?
 ### . How many threads should a program open?
 ### . Describe the differences between `notify` and `notifyAll`?
-### . Describe the differences between `synchronized` and `Lock`?
+
+
+## Thread Pool
