@@ -1,6 +1,7 @@
 import Highlight from '@site/src/components/Highlight'
 import Warn from '@site/src/components/Warn'
 import Term from '@site/src/components/Term'
+import Term2 from '@site/src/components/Term2'
 
 # Game Shop
 
@@ -47,34 +48,32 @@ import Term from '@site/src/components/Term'
 #### Non-Functional Requirements
 - Optimization for high availability, scalability, and security goals.
 
-1. High Availability Design and Implementation:
+1. **High Availability** Design and Implementation:
     - Introduce a distributed architecture and multi-layer caching strategy to ensure platform availability under high-concurrency scenarios, minimizing single-point-of-failure risks.
     - Implement load balancing to distribute requests across multiple backend instances, with health monitoring to ensure service availability.
     - (Note: A single machine serving 10,000 users is common. Multiple servers providing the same function form a cluster, not a distributed system. A distributed system involves different functions distributed across multiple machines.)
-3. High-Performance Optimization:
+3. **High-Performance** Optimization:
     - Design and implement database sharding, table partitioning, and index optimization strategies to efficiently handle user data and transaction records under large data volumes, avoiding database performance bottlenecks.
     - Use Redis for caching popular data to reduce database load and shorten query latency, significantly improving query response times and user experience.
     - Optimize Kafka configurations by adjusting partitions and replicas to enhance asynchronous message processing efficiency, enabling the system to handle instantaneous peak traffic and deliver fast responses.
-4. Security Assurance:
+4. **Security** Assurance:
     - Use JWT for user authentication and access control to ensure the security of user privacy and transaction information, supporting stateless authentication in distributed environments for system scalability.
     - Implement permission control and encrypted transmission for sensitive operations to ensure user data security, complying with industry security standards.
 
 ## FAQ
 ### 1. How is database sharding and table partitioning implemented in the high-performance game store platform project?
-    - In the high-performance game store platform project, database sharding and table partitioning are critical optimization strategies for handling large volumes of user and product data while ensuring high availability and performance. Below are the specific methods for implementing database sharding and table partitioning:
-
-1. Database Sharding
-    - Database sharding involves horizontally splitting data across multiple databases or tables to reduce the load on a single database and improve concurrent processing capabilities.
-        - Sharding Strategy: Select an appropriate sharding key to distribute user and order data across different databases. For example:
+1. <Term>Database Sharding</Term>
+    - Database sharding involves **horizontally splitting data across multiple databases or tables** to reduce the load on a single database and improve concurrent processing capabilities.
+        - Sharding Strategy: Select an appropriate <Term2>sharding key</Term2> to distribute user and order data across different databases. For example:
             - User ID: Shard based on user ID to allocate user data to different database instances.
             - Order ID: Use order ID or order creation time as the sharding key to store order data in different shards.
     - Sharding Middleware: Utilize sharding middleware such as Sharding-JDBC or MyCat to manage sharding logic. These tools add a management layer between the application and databases, enabling transparent access to sharded data.
     - Data Routing: Determine the target shard for data using the sharding strategy. For instance, a hash sharding algorithm can evenly distribute data across different shards.
-2. Table Partitioning
+2. <Term>Table Partitioning</Term>
     - Table partitioning involves splitting a table within a single database, typically for large tables, to improve query and storage efficiency.
     - Partitioning Strategy: Select appropriate fields for partitioning, such as time fields or user regions. For example:
-        - Order Table by Time Partitioning: Partition the order table by quarter or month to enable fast queries for specific time periods.
-        - Product Table by Category Partitioning: Partition data by product category to facilitate category-based queries.
+        - Order Table by **Time Partitioning**: Partition the order table by quarter or month to enable fast queries for specific time periods.
+        - Product Table by **Category Partitioning**: Partition data by product category to facilitate category-based queries.
     - MySQL Partitioned Tables: In MySQL, partitioning methods like RANGE, LIST, HASH, and KEY can be used, each suited to different data scenarios. For example:
         - RANGE Partitioning: Divide data by time ranges, such as partitioning the ORDER BY table by month.
         - HASH Partitioning: For user tables, partition by user ID to evenly distribute users across multiple partitions.
@@ -84,7 +83,7 @@ import Term from '@site/src/components/Term'
     - Scalability: Design sharding and partitioning with future expansion in mind to avoid storage bottlenecks as data grows.
 
 ### 2. How is Redis used to optimize query performance?
-In the high-concurrency game store platform, Redis caching significantly improves query performance and reduces database load. Below are the specific methods for optimizing query performance using Redis:
+- Redis caching significantly improves query performance and reduces database load. Below are the specific methods:
 
 1. Caching Hot Data
     - Product Details: Frequently accessed product details, such as name, price, description, and inventory, which change infrequently, are cached in Redis to reduce repetitive database queries.
@@ -97,25 +96,29 @@ In the high-concurrency game store platform, Redis caching significantly improve
     - Long-Term Data: For infrequently changing data (e.g., basic product info), set longer TTLs or manually refresh.
     - Setting appropriate expiration times ensures data timeliness while preventing excessive memory usage from cached data.
 3. Protection Against Cache Penetration, Breakdown, and Avalanche
-    - Cache Penetration: For frequent requests for non-existent data, use a Bloom filter before Redis to intercept invalid requests, reducing pressure on Redis and the database.
-    - Cache Breakdown: When a hot data item expires, multiple requests may hit the database simultaneously. Use a locking mechanism (e.g., Redis distributed lock) to ensure only the first request updates the cache, while others wait for the updated cache.
-    - Cache Avalanche: To prevent multiple cache entries from expiring simultaneously and overwhelming the database, set varied expiration times to avoid mass cache invalidation.
+    - <Term>Cache Penetration</Term>: For frequent requests for non-existent data, use a Bloom filter before Redis to intercept invalid requests, reducing pressure on Redis and the database.
+    - <Term>Cache Breakdown</Term>: When a hot data item expires, multiple requests may hit the database simultaneously. Use a locking mechanism (e.g., Redis distributed lock) to ensure only the first request updates the cache, while others wait for the updated cache.
+    - <Term>Cache Avalanche</Term>: To prevent multiple cache entries from expiring simultaneously and overwhelming the database, set varied expiration times to avoid mass cache invalidation.
     - These measures ensure Redis cache stability and high availability, preventing database overload due to cache failures.
 4. Using Redis List and Set for Rankings and Similar Data
-    - In the game store platform, leaderboards and recommended product lists are common. These can be stored using Redis List or Sorted Set. For example:
-    - Leaderboards: Use Sorted Set to sort products by scores, supporting dynamic sorting based on user visit frequency or sales volume.
-    - Recommended Product Lists: Use List or Set to store recommended product lists for quick retrieval during page loads.
+    - Leaderboards and recommended product lists are common. These can be stored using Redis List or Sorted Set. For example:
+        - Leaderboards: Use Sorted Set to sort products by scores, supporting dynamic sorting based on user visit frequency or sales volume.
+        - Recommended Product Lists: Use List or Set to store recommended product lists for quick retrieval during page loads.
     - Using Redis List, Set, and Sorted Set structures enables efficient management of ordered or unordered collection data, facilitating fast reads and sorting.
 5. Using Redis as Distributed Session Cache
-    - In multi-instance deployments, store user sessions in Redis to enable session sharing across instances. This ensures users maintain the same session state regardless of which server instance handles their request.
+    - In multi-instance deployments, store user sessions in Redis to **enable session sharing across instances**. This ensures users maintain the same session state regardless of which server instance handles their request.
     - Redis’s distributed session mechanism effectively resolves session issues in multi-instance deployments, providing a seamless user experience.
 6. Adopting Double-Write Strategy and Cache Refresh Mechanism
-    - Double-Write Strategy: When critical data like product information or order status is updated in the database, simultaneously update the Redis cache to ensure consistency between cache and database.
+    - <Term>Double-Write Strategy</Term>: When critical data like product information or order status is updated in the database, simultaneously update the Redis cache to ensure consistency between cache and database.
     - Cache Refresh Mechanism: For expired cache data, use background threads to periodically refresh hot data into Redis, preventing database access spikes caused by cache invalidation.
 
 ### 3. How is Kafka partition and replica configuration optimized to improve asynchronous message processing speed and eliminate traffic peaks, increasing throughput from 300 messages per second to 1200 messages per second? How is Kafka used in the project, and what types of messages are stored in Kafka?
 - Project Context
-    - The Shop project is implemented on a host with 96 cores and 64GB of memory, simulating a distributed system. A single server instance is deployed on this host, configured with 3 Kafka brokers, where each broker stores a complete replica of all system messages (replication factor of 3). Each topic is configured with 10 partitions. The server instance’s Controller receives messages, invokes a Kafka producer to batch-send messages to the corresponding Kafka topic, and starts an asynchronous thread to listen for callback topics. The corresponding Service listens to the topic, batch-fetches messages, and creates multiple threads to process these messages in parallel. Kafka enables traffic peak shaving, with requests processed asynchronously.
+    1. The Game Shop is implemented on a host with 96 cores and 64GB of memory, simulating a distributed system. 
+    2. A single server instance is deployed on this host, configured with 3 Kafka brokers, where each broker stores a complete replica of all system messages (replication factor of 3). 
+    3. Each topic is configured with 10 partitions. 
+    4. The server instance’s Controller receives messages, invokes a Kafka producer to batch-send messages to the corresponding Kafka topic, and starts an asynchronous thread to listen for callback topics. 
+    5. The corresponding Service (Consumer) listens to the topic, batch-fetches messages, and creates multiple threads to process these messages in parallel. Kafka enables traffic peak shaving, with requests processed asynchronously.
 
 - Specific Optimization Measures
 1. Increasing Partition Count:

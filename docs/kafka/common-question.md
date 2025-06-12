@@ -1,8 +1,8 @@
+# Common Questions
+
 import Highlight from '@site/src/components/Highlight'
 import Warn from '@site/src/components/Warn'
 import Term from '@site/src/components/Term'
-
-# Kafka
 
 ## I. Producer
 ### 1. What is the role of the acks parameter in Kafka Producers? What are its possible values

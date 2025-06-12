@@ -1,4 +1,4 @@
-# Stock Trading Platform - Robinhood
+# Robinhood
 
 ## Problem Requirements
 1. Users can buy and sell financial products via an exchange and see their existing positions
