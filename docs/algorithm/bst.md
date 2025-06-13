@@ -1,5 +1,8 @@
 # Binary Search Tree
 
+## Key Concept
+- bst中序遍歷就是ascending order的排序
+
 ## Advantage of BST
 - For each node in the tree, the value of every node in its left subtree must be smaller than the value of this node, and the value of every node in its right subtree must be larger than the value of this node
 
@@ -25,3 +28,16 @@ TreeSet是TreeMap的封裝
 `selectKey`: return the key at the given index
 `rank`: return the index of the given key
 
+## Template
+```java
+    void BST(TreeNode root, int target) {
+        if (root.val == target)
+            // do something
+        if (root.val < target) {
+            BST(root.right, target);
+        }
+        if (root.val > target) {
+            BST(root.left, target);
+        }
+    }
+```

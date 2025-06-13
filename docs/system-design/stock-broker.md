@@ -1,4 +1,4 @@
-# Stock Trading Platform - Robinhood
+# Robinhood
 
 ## Problem Requirements
 1. Users can buy and sell financial products via an exchange and see their existing positions
@@ -66,9 +66,11 @@
     1. Decide a price for each asset based on incoming data from multiple exchange layer services for a given ticker
     2. Deliver prices to the user layer
 
+    ```java
     User Service 1 ----websocket---> Pricing Service(GEM) <---- Exchange Service A <--UDP--> Exchange A
                                                          <---- Exchange Serviec B <--UDP--> Exchange B
-    User Service 2                    
+    User Service 2    
+    ```                
 
 ## Pricing Layer Load
 - Note that in our diagram, our pricing server can get overloaded by popular assets
@@ -80,8 +82,10 @@
 
 ## Pricing Forwarding Servers
 - For popular assets, forward data from pricing servers to intermediary cache servers
+```java
 - User Server 1 --websocket--> Pricing GME Cache 1 <--- Pricing GME Server
   User Server 2 --websocket--> Pricing GME Cache 2 <--- 
+```
 - Can use round robin load balancing to decide which node to connect to
 
 
