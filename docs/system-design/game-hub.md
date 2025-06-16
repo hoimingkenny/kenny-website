@@ -4,9 +4,8 @@ import Term from '@site/src/components/Term'
 import Term2 from '@site/src/components/Term2'
 
 # Game Shop
-
 ## Structure
-- MVC architecture JavaWeb project
+- MVC architecture Java Web project
 - Frontend: JSP framework, and the backend: Spring framework
 - Interaction between frontend and backend via RESTful API
 - Redis: in-memory database for storing frequently accessed data
@@ -61,7 +60,7 @@ import Term2 from '@site/src/components/Term2'
     - Implement permission control and encrypted transmission for sensitive operations to ensure user data security, complying with industry security standards.
 
 ## FAQ
-### 1. How is database sharding and table partitioning implemented in the high-performance game store platform project?
+### 1. How is database sharding and table partitioning implemented in the high-performance?
 1. <Term>Database Sharding</Term>
     - Database sharding involves **horizontally splitting data across multiple databases or tables** to reduce the load on a single database and improve concurrent processing capabilities.
         - Sharding Strategy: Select an appropriate <Term2>sharding key</Term2> to distribute user and order data across different databases. For example:

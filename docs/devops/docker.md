@@ -1,3 +1,8 @@
+import Highlight from '@site/src/components/Highlight'
+import Warn from '@site/src/components/Warn'
+import Term from '@site/src/components/Term'
+
+
 # Docker
 
 ### 1. What is Docker, and how does it differ from a virtual machine?
@@ -112,3 +117,23 @@ EXPOST 8080
     - `docker push`
 4. Pull and run the image by `docker run`
 
+### 13. `docker run` example
+```bash
+docker run --name mysql-primary -d \
+    --network mysql-net \
+    -e MYSQL_ROOT_PASSWORD=root_password \
+    -v mysql-primary-data:/var/lib/mysql \
+    -p 3306:3306 \
+    mysql:8.0
+```
+- `-e`: Set environment variables.
+- `-v`: Mount a volume.
+
+### 13. Dockerfile vs  Docker Compose
+- <Term>Dockerfile</Term>
+    1. For building images.
+    2. `docker build`
+- <Term>docker-compose.yml</Term>
+    1. For multi-container applications.
+    2. Use `docker-compose up`
+    3. Like link the web app with database container.

@@ -116,7 +116,7 @@ int value = threadLocalVar.get();
     2. It uses `lock()` and `unlock()` methods to acquire and release locks.
     3. Fair locks allocation locks in the order of thread requests, ensuring fairness but potentially increasing wait times.
     4. Non-fair locks do not guarantee allocation order, reducing contention and improving performance but potentially causing thread starvation.
-3. <Term>ReentrantLock</Term>
+3. <Term>ReadWriteLock</Term>
     1. In `java.util.concurrent.locks.ReadWriteLock` package.
     2. A lock that allows multiple readers to access a shared resource simultaneously but restricts writers to exclusive access.
     3. Ideal for scenarios where reads significantly outnumber writes, enhancing concurrency.
