@@ -116,7 +116,7 @@ int value = threadLocalVar.get();
     2. It uses `lock()` and `unlock()` methods to acquire and release locks.
     3. Fair locks allocation locks in the order of thread requests, ensuring fairness but potentially increasing wait times.
     4. Non-fair locks do not guarantee allocation order, reducing contention and improving performance but potentially causing thread starvation.
-3. <Term>ReentrantLock</Term>
+3. <Term>ReadWriteLock</Term>
     1. In `java.util.concurrent.locks.ReadWriteLock` package.
     2. A lock that allows multiple readers to access a shared resource simultaneously but restricts writers to exclusive access.
     3. Ideal for scenarios where reads significantly outnumber writes, enhancing concurrency.
@@ -443,3 +443,28 @@ public class MainThreadWaitExample {
 
 - Implementation in ReentrantLock
 ReentrantLock uses this counter mechanism to implement reentrancy. It allows a thread to acquire the same lock multiple times and correctly handles lock acquisition and release, preventing deadlocks and other concurrency issues.
+
+### 10. What Are Fair and Non-Fair Locks?
+#### <Term>Fair Lock</Term>
+- Multiple threads acquire the lock in the order they requested it.
+- Threads join a queue, and the first thread in the queue gets the lock.
+- Advantage: Fairness, each thread gets a chance to execute after waiting.
+- Disadvantage: Slower execution and lower throughput.
+
+#### <Term>Non-Fair Lock</Term>
+- Threads attempt to acquire the lock directly.
+- If successful, they take the lock; if not, they join the end of the waiting queue.
+- Advantage: Improved performance, faster execution.
+- Disadvantage: Cause thread starvation, where some threads in the queue wait indefinitely if others keep "cutting in."
+
+### 11. Why Does a Non-Fair Lock Have Higher Throughput Than a Fair Lock?
+#### Fair Lock Execution
+1. When acquiring a lock, a thread joins the end of the waiting queue and sleeps.
+2. When a thread releases the lock, it wakes the first thread in the queue to attempt acquiring the lock.
+3. The lock is used in queue order.
+4. During this process, threads switch between running and sleeping states, requiring **transitions between user and kernel modes**, which are slow, reducing execution speed.
+
+#### Non-Fair Lock Execution
+1. Threads first attempt to acquire the lock using CAS (Compare-And-Swap).
+2. If successful, they take the lock; if not, they join the waiting queue.
+3. This avoids the need for strict ordering, reducing thread sleeping and waking operations, thus improving execution efficiency.

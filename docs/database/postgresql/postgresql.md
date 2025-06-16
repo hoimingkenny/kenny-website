@@ -334,3 +334,45 @@ COMMIT;
 1. Changes are first written to a log.
 2. The log is flushed to disk.
 3. Only then is the transaction considered committed.
+
+## Locking
+### Pessimistic Locking
+```sql
+BEGIN;
+
+-- Lock an available ticket for the given event
+SELECT id
+FROM Tickets
+WHERE event_id = $1 AND status = 'available'
+LIMIT 1
+-- highlight-next-line
+FOR UPDATE;
+
+-- If a row is returned, update its status to 'booked'
+UPDATE Tickets
+SET status = 'booked'
+WHERE id = $2; -- Use the id from the SELECT
+
+COMMIT;
+```
+
+### Optimistic Concurrency Control (OCC)
+- Assume conclicts are rare and use versioning mechanism to resolve conflicts.
+```sql
+BEGIN;
+
+-- Read the ticket's current status and version
+SELECT id, status, version
+FROM Tickets
+WHERE event_id = $1 AND status = 'available'
+LIMIT 1;
+
+UPDATE Tickets
+SET status = 'booked',
+    -- highlight-next-line
+    version = version + 1
+WHERE id = $2 AND version = $3;
+
+-- If no rows updated (version changed), rollback and retry
+COMMIT;
+```

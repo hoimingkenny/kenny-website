@@ -133,7 +133,7 @@ const config: Config = {
     prism: {
       theme: lightCodeTheme,
       darkTheme: darkCodeTheme,
-      additionalLanguages: ['java', 'yaml', 'bash'],
+      additionalLanguages: ['java', 'yaml', 'bash', 'sql'],
       magicComments: [
         // Remember to extend the default highlight class name as well!
         {
