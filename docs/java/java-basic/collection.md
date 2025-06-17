@@ -100,7 +100,7 @@
 #### 3. Introduction to the Implementation Principle of HashMap
 - Before JDK 1.7
     1. Consisted of an array combined with linked lists. HashMap uses a hash algorithm to map the keys (Key) of elements to slots (Buckets) within the array.
-    2. When multiple keys hash to the same slot, they are stored as a linked list within that slot.
+    2. When multiple keys hash to the same slot, they are **stored as a linked list within that slot**.
     3. However, since the lookup time for a linked list is O(n), severe collisions—where a single index contains a very long linked list—result in low efficiency.
 
 - To address this, in JDK 1.8
@@ -150,3 +150,108 @@
     1. Adding Elements: Use the put method to add key-value pairs (e.g., map.put("key", "value");).
     2. Retrieving Values: Use the get method to retrieve the value associated with a key (e.g., map.get("key");).
     3. Checking Key Existence: Use the containsKey method to check if a key exists (e.g., map.containsKey("key");).
+
+### Question
+#### 1. **Understand the collection system hierarchy.**
+    - Root Interface
+        - `Collection`: Base **interface** for all collections, providing methods like `add()`, `remove()`, `size()`, etc.
+        - `Map`: Not a subtype of `Collection`, but provides methods like `put()`, `get()`, etc.
+    - Subtype Interfaces
+        - `List`: Ordered collection, supports indexed access and duplicate elements.
+        - `Set`: Unordered collection, does not support indexed access and no duplicate elements.
+        - `Queue`: A collection that supports insertion and removal at both ends.
+
+#### 2. **What is an iterator?**
+    - For traversal of collections, e.g. `List` and `Set`.
+    ```java
+    List<String> list = new ArrayList<>(Arrays.asList("A", "B", "C"));
+    Iterator<String> iterator = list.iterator();
+    while (iterator.hasNext()) {
+        System.out.println(iterator.next());
+    }
+    ```
+#### 3. **What are the differences between `HashMap` and `Hashtable`?**
+    - `HashMap`: Not thread-safe, allow one null key.
+    - `Hashtable`: Thread-safe, does not allow null key.
+
+#### 4. **How is the expansion operation of `HashMap` implemented?**
+    - Load Factor: 0.75
+    - Threshold: `current capacity * load factor`; trigger resize when exceeded.
+
+    - Expansion Process:
+        1. If `size > threshold`, resize to `2 * current capacity`.
+        2. A new array is created with the new capacity.
+        3. All existing entreis are rehased  to the new array.
+
+    - Rehashing cost `O(n)`.
+
+#### 5. **How does `HashMap` resolve hash collisions?**
+    - When multiple keys hash to the same slot, they are **stored as a linked list within that slot.
+    If the linked list exceeds a threshold, the list is converted to a Red-Black Tree for `O(log n)`.
+
+#### 6. **Why doesn’t `HashMap` directly use the hash value processed by `hashCode()` as the index for the table?**
+    1. Variable Table Size: The table size is a power of 2 (e.g., 16, 32), but hashCode() returns a 32-bit integer, which may not map directly to the table’s range.
+    2. Collision Risk: hashCode() values can be unevenly distributed, leading to frequent collisions.
+    3. Optimization: HashMap applies its hash function to improve distribution/
+
+#### 7. **What are the differences between `ConcurrentHashMap` and `Hashtable`?**
+    - `ConcurrentHashMap`: Thread-safe, Segmented locking.
+    - `Hashtable`: Thread-safe, Full synchronization locking.
+
+#### 8. **What is the fail-fast mechanism in Java collections?**
+- Fail-fast mechanism causes an Iterator to throw a `ConcurrentModificationException` if the collection is structurally modified (e.g., elements added/removed) during iteration.
+- Prevents unpredictable behavior during iteration in non-thread-safe collections.
+
+#### 9. **What are the differences between `ArrayList` and `Vector`?**
+- `ArrayList`: single-threaded, high-performance needs.
+- `Vector`: multi-threaded, full synchronization locking.
+
+#### 10. **What are the differences between `ArrayList` and `LinkedList`?**
+- `ArrayList`: **faster random access**, but slower insertion/deletion (shift elements).
+- `LinkedList`: **faster insertion/deletion (no shifting)**, slower random access (traverse list).
+
+#### 11. **How does `HashSet` ensure that data is not duplicated?**
+- By leveraging a `HashMap` internally.
+
+- Mechanism:
+    1. `HashSet` stores elements as keys in a `HashMap`, with a dummy value (e.g., PRESENT).
+    2. When adding an element, HashMap checks if the key already exists using:
+        1. `hashCode()` to compute the bucket.
+        2. `equals()` to compare with existing keys in the bucket.
+    3. If the key exists, the element is not added (no duplicates).
+
+#### 12. **What are the differences between `Set` and `List`?**
+- `Set`: No duplicates, unordered.
+- `List`: Ordered, duplicates allowed.
+
+#### 13. **What are the differences between `HashMap` and `TreeMap`?**
+- `HashMap`: No ordering, `O(1)` for get/put, Hash Table-like data structure.
+- `TreeMap`: Sorted, `O(log n)` for get/put, Red-Black Tree-like data structure.
+
+#### 14. **What are the differences between `Collection` and `Collections`?**
+- `Collection`: Interface.
+- `Collections`: Utility class, provide static methods, like `sort()`.
+
+#### 15. **Explain the logic for selecting a collection implementation class.**
+1. List
+    - ArrayList: For random access, iteration, and general use (`O(1)` get, `O(n)` insert/delete)
+    - LinkedList: For frequent insert/delete, iteration (`O(1)` insert/delete, `O(n)` get)
+    - Vector: Rarely used, only for legacy or synchronized use. 
+2. Set
+    - HashSet: Fast, unordered, unique elements (O(1) add/contains).
+    - LinkedHashSet: Maintains insertion order, slightly slower than HashSet.
+    - TreeSet: Sorted elements, slower (O(log n) add/contains).
+
+3. Map:
+    - HashMap: Fast, unordered key-value pairs (O(1) get/put).
+    - LinkedHashMap: Maintains insertion order, useful for iteration.
+    - TreeMap: Sorted keys, slower (O(log n) get/put).
+    - ConcurrentHashMap: Thread-safe, high concurrency.
+    - Hashtable: Legacy, fully synchronized (avoid unless required).
+
+4. Queue:
+    - PriorityQueue: Priority-based ordering.
+    - ArrayDeque: Fast deque operations.
+    - LinkedList: General-purpose queue or deque.
+
+- Decision Process: Ordering, duplicates, thread-safety, access pattern.

@@ -364,9 +364,16 @@ import Term from '@site/src/components/Term'
 
 ### 7. What are the methods for inter-thread communication?
 
-### . Describe the differences between a process and a thread?
-### . How many threads should a program open?
-### . Describe the differences between `notify` and `notifyAll`?
+### 8. How many threads should a program open?
 
 
-## Thread Pool
+### 9. Describe the differences between `sleep()` and `wait()`?
+- `sleep()`: `Thread` class, pauses the current thread for a specified time.
+- `wait()`: `Object` class, waits for another thread to notify.
+
+### 10. Describe the differences between `notify()` and `notifyAll()`?
+- `notify()`: Wakes up one thread waiting on the object’s monitor.
+- `notifyAll()`: Wakes up all threads waiting on the object’s monitor
+
+### 11. What is the difference between the `run()` and `start()` methods of a thread?
+
