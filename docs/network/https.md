@@ -28,3 +28,6 @@
 **Authentication:** SSL certificates verify that a client is talking to the correct server that actually owns the domain. This helps prevent domain spoofing and other kinds of attacks
 
 **HTTPS:** HTTPS is the secure form of HTTP, and HTTPS websites are websites that have their traffic encrypted by SSL/TLS
+
+## CORS
+1. Allow servers to specify which origins are allowed to access them.

@@ -119,7 +119,9 @@ int value = threadLocalVar.get();
 3. <Term>ReadWriteLock</Term>
     1. In `java.util.concurrent.locks.ReadWriteLock` package.
     2. A lock that allows multiple readers to access a shared resource simultaneously but restricts writers to exclusive access.
-    3. Ideal for scenarios where reads significantly outnumber writes, enhancing concurrency.
+    3. ReadLock: If no thread holds the write lock, any number of threads can acquire the read lock.
+    4. A thread can acquire the write lock only if no other threads hold either the read lock or the write lock. All read and write requests wait until the write lock is released.
+    5. Ideal for scenarios where reads significantly outnumber writes, enhancing concurrency.
 4. <Term>Optimistic and Pessimistic Locks</Term>
     1. Pessimistic locking: assumes the worst-case scenario and locks resource before access.
     2. Both `synchronized` and `ReentrantLock` are example of pessimistic locks.

@@ -77,7 +77,7 @@ import Term from '@site/src/components/Term'
         1. Same as `Runnable`.
     - <Term>Extends ExecutorService</Term>
       - Starting from Java5, `java.util.concurrent.ExecutorService` introduced support for thread pools.
-      - A way more efficient to manage threads, avoiding the overhead of creating and destroying threads.
+      - A way more efficient to manage threads, **avoiding the overhead of creating and destroying threads**.
       - Different types of thread pools can be created using the static methods of the `Executors` class.
         ![](../assets/nexFixedThreadPool.png)
       ```java
@@ -90,6 +90,7 @@ import Term from '@site/src/components/Term'
 
         ExecutorService executor = Executors.newFixedThreadPool(10);
         for(int i = 0; i < 100; i++) {
+          // highlight-next-line
           executor.submit(new Task());
         }
         executor.shutdown();
@@ -364,16 +365,62 @@ import Term from '@site/src/components/Term'
 
 ### 7. What are the methods for inter-thread communication?
 
-### 8. How many threads should a program open?
-
-
-### 9. Describe the differences between `sleep()` and `wait()`?
+### 8. Describe the differences between `sleep()` and `wait()`?
 - `sleep()`: `Thread` class, pauses the current thread for a specified time.
 - `wait()`: `Object` class, waits for another thread to notify.
 
-### 10. Describe the differences between `notify()` and `notifyAll()`?
+### 9. Describe the differences between `notify()` and `notifyAll()`?
 - `notify()`: Wakes up one thread waiting on the object’s monitor.
 - `notifyAll()`: Wakes up all threads waiting on the object’s monitor
 
-### 11. What is the difference between the `run()` and `start()` methods of a thread?
+### 10. What is the difference between the `run()` and `start()` methods of a thread?
 
+
+## Thread Pool
+### Configuration of Thread Pool.
+1. corePoolSize: The minimum number of threads kept alive in the pool, even when idle.
+2. maximumPoolSize: The maximum number of threads allowed in the pool when the task queue is full.
+3. Queue Capacity: The number of tasks that can be queued when all core threads are busy (before scaling up to maxPoolSize).
+4. KeepAliveTime: The amount of time a non-core thread can remain idle before being terminated.
+5. workQueue: The queue used to store tasks when all core threads are busy.
+6. handler: The policy to use when the task queue is full and all threads are busy.
+
+### Built-in Rejection Strategies.
+1. `CallerRunsPolicy`: The task is executed by the thread that calls the execute method.
+2. `AbortPolicy`: Directly throws an exception indicating that the task was rejected by the thread pool.
+3. `DiscardPolicy`: Silently discards the submitted task without any processing.
+4. `DiscardOldestPolicy`: Discards the oldest task in the queue and then executes the new task.
+
+### Do you have experience with thread pool parameter settings?
+- CPU-intensive: corePooSize = coreSize + 1;
+  - If the number of threads exceeds the number of CPU core significantly, threads will compete for CPU time, causing frequent context switching.
+  
+- Trade-off of increasing number of threads:
+  1. <Term>Context Switching</Term>: CPU switches from one thread to another, cost arise due to save and restore thread's state.
+
+
+#### E-commerce:
+- Instantaneous high concurrency
+```java
+new ThreadPoolExecutor(
+    16,                     // corePoolSize = 16 (assuming 8-core CPU × 2)
+    32,                     // maximumPoolSize = 32 (expand for burst traffic)
+    10, TimeUnit.SECONDS,   // non-core threads recycled after 10s idle
+    new SynchronousQueue<>(), // no task caching, directly expand threads
+    new AbortPolicy()       // reject directly to avoid system overload
+);
+```
+
+#### Microservice HTTP Request:
+```java
+new ThreadPoolExecutor(
+    16,                     // corePoolSize = 16 (8-core × 2)
+    64,                     // maximumPoolSize = 64 (handle slow downstream)
+    60, TimeUnit.SECONDS,   // non-core threads recycled after 60s idle
+    new LinkedBlockingQueue<>(200), // bounded queue with capacity 200
+    new CustomRetryPolicy() // custom rejection policy (retry or fallback)
+);
+```
+
+- CallRunsPolicy(): 
+- AbortPolicy():

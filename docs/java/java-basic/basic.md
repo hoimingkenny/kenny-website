@@ -6,10 +6,10 @@ import Term from '@site/src/components/Term'
 
 ### Object
 #### 1. What is the difference between `==` and `equals`?
-1. For string variables
+1. For String,
     1. `==` compares whether the **memory addresses (in the heap)** of two strings are numerically equal, which is a value comparison.
-    2. `equals` compares whether the contents of the strings are the same.
-2. For non-string variables
+    2. `equals` compares **content of the two strings**.
+2. For non-String variables
     1. if the equals() method is not overridden, the behavior of `==` and `equals` is the same.
     2. Both are used to **compare the memory addresses of objects** in the heap, i.e., to determine whether two reference variables point to the same object.
 
@@ -23,6 +23,30 @@ import Term from '@site/src/components/Term'
             2. if `obj1.hashCode() == obj2.hashCode()`, `obj1.equals(obj2)` might be `false`.
 
     - When overriding the equals method, it is essential to override the hashCode method.
+
+    - Hash-based collection uses `hashCode()` to find the bucket.
+        - Overriding the `equals` method but with different hashCode methods, can lead to unexpected behavior.
+
+    ```java
+    class Person {
+        String name;
+        Person(String name) { this.name = name; }
+        @Override
+        public boolean equals(Object o) {
+            if (o instanceof Person) {
+                return name.equals(((Person) o).name);
+            }
+            return false;
+        }
+        // hashCode() not overridden
+    }
+    Person p1 = new Person("Alice");
+    Person p2 = new Person("Alice");
+    HashSet<Person> set = new HashSet<>();
+    set.add(p1);
+    System.out.println(set.contains(p2));
+    ```
+
 
 #### 3. Differences and Relationships Between `String`, `StringBuffer`, and `StringBuilder`
     - Mutability
