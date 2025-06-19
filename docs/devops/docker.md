@@ -4,9 +4,8 @@ import Term from '@site/src/components/Term'
 
 
 # Docker
-
 ### 1. What is Docker, and how does it differ from a virtual machine?
-1. Docker: Containeriation platform that packages applications and their dependencies into lightweight containers.
+1. Docker: Containeriation platform that **packages applications and their dependencies into lightweight containers**.
 2. Unlike VM, which include a full OS and emulate hardware using a hypervisor, Docker containers share the host's OS kernel, making them faster, and more resources efficient.
 3. Containers enable consistent environments across development, testing, and production.
 
@@ -39,7 +38,7 @@ FROM nexus.xxxx.com:8443/repository/xxxx-docker-release/openjre-21:1.0-0
 COPY target/app.jar /app/app.jar
 COPY config /app/config
 ENTRYPOINT ["summon", "-f", "/etc/summon/secrets.yml", "java", "-jar", "/app/app.jar"]
-EXPOST 8080
+EXPOSE 8080
 ```
 
 ### 5. How do you manage persistent data in Docker containers?
