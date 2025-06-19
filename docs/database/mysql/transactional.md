@@ -16,11 +16,13 @@ import Term from '@site/src/components/Term'
 
 #### <Term>Non-Repeatable Read</Term>
 ![](./assets/non-repeatable-read.png)
+- Scope: Specific row
 - If a transaction reads the same data multiple times and the **data differs between reads**, it means a non-repeatable read has occurred.
 
 
 #### <Term>Phantom Read</Term>
 ![](./assets/phantom-read.png)
+- Scope: Set of rows
 - If a transaction queries the "number of records" meeting a certain condition multiple times and **the number of records differs between queries**, it means a phantom read has occurred.
 - Transaction A starts by querying the database for accounts with a balance greater than 1 million and finds 5 records. Transaction B, using the same search condition, also queries and finds 5 records.
 - Next, Transaction A inserts a new account with a balance exceeding 1 million and commits the transaction, increasing the number of accounts with a balance over 1 million to 6.

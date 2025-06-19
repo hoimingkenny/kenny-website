@@ -40,3 +40,10 @@ Neither GET nor POST is inherently secure. GET parameters are visible in the URL
     - 400: Bad Request, 401: Unauthorized, 403: Forbidden, 404: Not Found, 405: Method Not Allowed, 406: Not Acceptable, 408: Request Timeout
 5. 5xx: Server Error
     - 500: Internal Server Error, 502: Bad Gateway, 503: Service Unavailable, 504: Gateway Timeout
+
+## HTTP Method
+1. GET: Retrieve a resource.
+2. POST: Create a resource.
+3. PUT: Update an entire resource. If it doesn't exist, it creates a new resource.
+4. PATCH: Partially update a resource.
+5. DELETE: Delete a resource.

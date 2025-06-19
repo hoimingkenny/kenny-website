@@ -12,7 +12,7 @@
 1. The client (browser) and the server establish a TCP connection.
 2. The client sends a “client hello” to the server. The message contains a set of necessary encryption algorithms (cipher suites) and the highest TLS version it can support. The server responds with a “server hello”, confirming compatibility with the algorithms and TLS version.
    - The server then sends its SSL certificate to the client for validation. The certificate contains the public key, hostname, expiry dates, etc.
-3. After validating the SSL certificate, the client generates a session key, encrypts it using the public key, and sends it to the server. The server receives the encrypted session key and decrypts it using its private key.
+3. After validating the SSL certificate, the client **generates a session key, encrypts it using the public key**, and sends it to the server. The server receives the encrypted session key and decrypts it using its private key.
 4. Now that both the client and the server possess the same session key (symmetric encryption), they can securely exchange encrypted data in a bi-directional channel.
 
 ## What is an SSL certificate?
@@ -28,3 +28,6 @@
 **Authentication:** SSL certificates verify that a client is talking to the correct server that actually owns the domain. This helps prevent domain spoofing and other kinds of attacks
 
 **HTTPS:** HTTPS is the secure form of HTTP, and HTTPS websites are websites that have their traffic encrypted by SSL/TLS
+
+## CORS
+1. Allow servers to specify which origins are allowed to access them.

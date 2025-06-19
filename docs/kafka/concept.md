@@ -26,7 +26,7 @@
         - By restricting operations to appending data at the end of the log, Kafka minimizes disk seek times.
     3. Scalability:
         - Append-only log mechanism facilitates horizontal scaling.
-        - More partitions can be added and distributed across a cluster of brokers.
+        - More partitions can be added and **distributed across a cluster of brokers**.
         - Each partition can be replicated across multiple brokers to enhance fault tolerance.
 
 ### Topic
@@ -107,5 +107,5 @@
     3. Ensure that messages with same key always go to the same partitions.
     
 2. Broker assignment
-    1. Once the partition is determined, Kafka then identifies which broker holds that particular partition.
+    1. Once the partition is determined, Kafka then identifies **which broker holds that particular partition**.
     2. The mapping of partitions to specific brokers is managed by Kafka cluster metadata, which is maintained by the Kafka controller.

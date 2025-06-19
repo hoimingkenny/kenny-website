@@ -23,20 +23,20 @@
 
 ### 4. Explain the role of Deployments, ReplicaSets, and Services in Kubernetes.
 1. Deployments
-    1. Manage application updates and scalling ensuring smooth rollouts and rollbacks wihout downtime.
+    1. Manage application updates and scalling ensuring smooth **rollouts and rollbacks** wihout downtime.
 2. ReplicaSets
     1. Ensure a specified number of pod replicas are running, controlled by Deployments. 
     2. They maintain availability if pods fail.
 3. Services
-    1. To expose pods over a network.
+    1. To **expose pods over a network**.
     2. Each pod gets it own IP address.
 4. Ingress
-    1. As entrypoint for routing external traffic to services. 
+    1. As **entrypoint for routing external traffic** to services. 
 5. Horizaontal Pod Autoscaler
     1. To automatically scale pods based on CPU or memory usage.
 
 ### 5. What is a Kubernetes Namespace, and why is it used?
-1. A Namespace is a virtual cluster within a Kubernetes cluster, used to organize and isolate resources like pods, services, and deployments.
+1. A Namespace is a **virtual cluster** within a Kubernetes cluster, used to organize and isolate resources like pods, services, and deployments.
 2. Separate environments (e.g., dev, prod) or teams in a shared cluster, preventing naming conflicts and enabling resource quotas.
 3. Resource Quotas: Limit resource usage within a namespace.
 
@@ -74,3 +74,14 @@
     1. Check logs with `kubectl logs <pod_name>` to identify errors
     2. Run `kubectl describe pod <pod_name>` to see events, such as resource limits or image pull issues.
     3. Verify the pod’s configuration, like `command` or `args` in the YAML, for errors.
+
+### 11. Deployment Strategies
+1. Rolling Update: Replace pods **one at a time**, ensuring no downtime.
+2. Blue-Green Deployment
+    - Blue: Runs the current version of the app.
+    - Green: Runs the new version of the app.
+    - Once the green version is tested and ready, switch traffic to it.
+    - Want to test the new version thoroughly before switching traffic.
+3. Canary Deployment
+    - Deploy a new version to a small subset of users.
+    - Minimizes risk by testing on a small scale.
