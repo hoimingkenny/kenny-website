@@ -1,3 +1,8 @@
+import Highlight from '@site/src/components/Highlight'
+import Warn from '@site/src/components/Warn'
+import Term from '@site/src/components/Term'
+import Term2 from '@site/src/components/Term2'
+
 # Resource
 
 1. Labuladong Algo Notes (Paid)
