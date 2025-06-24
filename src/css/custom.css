@@ -28,3 +28,60 @@
   --ifm-color-primary-lightest: #4fddbf;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
+
+/* -------------------------------------------------------------------------- */
+/*                                 側邊欄邊線                                  */
+/* -------------------------------------------------------------------------- */
+.menu__list .menu__list {
+  border-bottom: 2px solid #949696;
+  border-bottom-color: #ffffff00 !important;
+  border-left: 2px solid #949696;
+  border-radius: 0 0 0 10px;
+  margin-left: 1rem;
+  padding-left: 0.3rem;
+}
+
+
+/* -------------------------------------------------------------------------- */
+/*                                  Markdown                                  */
+/* -------------------------------------------------------------------------- */
+.markdown {
+  h1:first-child {
+    font-size: 2.2rem;
+  }
+
+  > h2 {
+    font-size: 1.8em;
+    border-bottom: 1.25px solid var(--ifm-color-primary-light);
+    margin-top: 1rem;
+    padding: 5px 0 5px 0px;
+  }
+
+  > h3 {
+    font-size: 1.4rem;
+    border-left: 4px solid var(--ifm-color-primary-light);
+    padding: 5px 0 5px 10px;
+  }
+
+  code {
+    border: 0.1rem solid transparent;
+  }
+
+  a:not(.hash-link) {
+    text-decoration: none;
+    font-weight: inherit;
+    border-bottom: 1px solid rgba(125, 125, 125, 0.3);
+    transition: border 0.15s ease-in-out;
+  }
+
+  a:not(.hash-link):hover,
+  a:not(.hash-link):focus {
+    border-bottom: 1.5px solid var(--ifm-color-primary-light);
+  }
+
+  img {
+    border-radius: 10px;
+    display: flex;
+    margin: 0 auto;
+  }
+}
