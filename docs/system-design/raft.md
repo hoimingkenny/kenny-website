@@ -1,23 +1,31 @@
-# Raft
+# Distributed Key-Value Storage System
 
-分布式FAQ
-分布式Key-Value存储系统
-项目介绍
-1.项目背景：
-随着数据规模的快速增长和业务需求的不断变化，对数据存储系统的要求也越来越高。传统的集中式存储系统在应对大规模分布式环境时，尤其在高可用性、强一致性和水平扩展性方面显得力不从心。为了满足现代业务的需要，我们需要开发一个具有高可用性和一致性的分布式Key-Value存储系统，确保在处理大量数据的同时，系统依然能够稳定可靠地运行。
-2.需求分析与系统设计：
-在需求分析阶段，将需求主要分为功能和非功能需求。
-功能类需求：包括键值对的增删改查操作、增加节点和删除节点的功能。
-非功能需求：包括系统性能、一致性、可用性、扩展性等。
-系统设计阶段，采用了分层架构设计，包括了客户端层、代理层、数据管理层和存储层，接下来具体介绍每一层的作用：
-客户端层
-客户端层是系统与最终用户交互的接口。它提供简单的API来执行KV操作，如get、set和delete。可以解析用户输入的命令，检验是否合法，实现了失败重试和负载均衡。也提供了管理集群配置的API，如config-get、config-add、config-del等，分别用于获取集群配置、增减集群、增减集群中的节点等。
-代理层
-代理层充当客户端和数据管理层之间的中介。它负责请求的路由、分发和聚合。代理层通过一致性哈希算法将客户端请求路由到正确的数据分片，并可以处理跨多个数据分片的请求，类似与redis中的MGET、MSET
-数据管理层
-数据管理层负责数据的一致性和可用性。整个数据库基于Multi-Raft架构，而每个数据分片由一个Raft组管理。Raft协议通过Leader选举、日志复制和快照更新等机制，确保了数据的一致性和高可用性。
-存储层
-存储层负责数据的物理存储。系统支持切换不同的存储引擎，以适应不同的使用场景和性能需求。这一部分使用的存储引擎均使用开源实现，主要用它们来实现Raft算法中的状态机，实现读快照、写快照，日志应用到状态机、从状态机获取键对应的值等。
+## Introduction
+### Project Background
+With the rapid growth of data scale and evolving business needs, the requirements for data storage systems are becoming increasingly stringent. Traditional centralized storage systems struggle to meet the demands of large-scale distributed environments, particularly in terms of high availability, strong consistency, and horizontal scalability. To address modern business requirements, we aim to develop a distributed Key-Value storage system with high availability and consistency, ensuring stable and reliable operation while handling large volumes of data.
+
+### Requirements Analysis and System Design
+#### Functional Requirements
+- Include CRUD operations for key-value pairs, as well as functions for adding and removing nodes.
+
+#### Non-Functional Requirements
+- Include system performance, consistency, availability, and scalability.
+
+In the system design phase, a layered architecture is adopted, consisting of the client layer, proxy layer, data management layer, and storage layer. Each layer’s role is described below:
+
+#### Client Layer
+The client layer serves as the interface for end-user interaction. It provides simple APIs for key-value operations such as get, set, and delete. It parses user commands, validates their legality, and implements features like failure retries and load balancing. Additionally, it offers APIs for managing cluster configurations, such as config-get, config-add, and config-del, which are used to retrieve cluster configurations, add or remove clusters, and manage nodes within clusters.
+
+#### Proxy Layer
+The proxy layer acts as an intermediary between the client and data management layers. It handles request routing, distribution, and aggregation. Using a consistent hashing algorithm, the proxy layer routes client requests to the appropriate data shards and can manage requests spanning multiple shards, similar to Redis’s MGET and MSET.
+
+#### Data Management Layer
+The data management layer ensures data consistency and availability. The database is built on a Multi-Raft architecture, with each data shard managed by a Raft group. The Raft protocol, through mechanisms like leader election, log replication, and snapshot updates, guarantees data consistency and high availability.
+
+#### Storage Layer
+The storage layer handles physical data storage. The system supports switching between different storage engines to accommodate various use cases and performance needs. The storage engines used are open-source implementations, primarily employed to implement the state machine in the Raft algorithm, supporting operations such as reading and writing snapshots, applying logs to the state machine, and retrieving values for specific keys from the state machine.
+
+
 3.核心挑战：
 主要的核心挑战分为四个：设计网络通信协议、分区算法选型、一致性算法选型与实现、存储引擎选型。
 通信协议的设计、代理层的分区算法如何实现、raft算法实现(日志存储本层实现，需要应用数据管理层封装的具体实现)、针对raft的状态机的快照机制如何应用不同的存储引擎。
@@ -122,6 +130,39 @@ Raft 的随机化选举超时机制可以减少多个节点同时成为候选人
 在日志不一致时，Leader 需要正确回退日志并覆盖 Follower 的冲突条目。这要求 Leader 维护一个准确的日志索引并能够识别出冲突的位置。
 3.性能优化：
 日志复制过程可能会导致延迟，特别是在网络不稳定的情况下，因此要采用手段去优化性能。
+
+## Raft Algorithm
+1. How is the Raft consistency consensus algorithm implemented? What challenges were encountered?
+2. The Raft protocol is a consensus algorithm designed for consistency in distributed systems. Its goal is to simplify and decompose the consensus problem, making it more understandable and easier to implement compared to Paxos. It revolves around several core concepts, which guide its implementation:
+    1. Node Roles: Leader, Follower, Candidate
+    2. Term and Election: The election process includes initiating an election, requesting votes, and successfully electing a leader.
+    3. Log Replication: This involves appending log entries, confirming log entries, and committing log entries to the state machine.
+3. The Raft protocol ensures log consistency through mechanisms such as:
+    1. Log Matching Conditions
+    2. Log Compaction Mechanism
+4. Raft can handle various failure scenarios, determined by the details of the protocol.
+5. Each node’s internal storage is divided into three forms:
+    1. Log File: Records user requests, stored in binary format.
+    2. State Machine: Stores log requests confirmed by the majority of Followers.
+    3. Snapshot: Used to compress logs by saving the state machine’s data.
+6. Based on these concepts, the Raft protocol implementation includes three main functional components:
+    1. requestVote: Handles vote requests from candidates during elections.
+    2. appendEntries: Processes append entry requests from the Leader, which may be heartbeat messages (empty entries) or log replication requests.
+    3. installSnapshot: Manages snapshot installation requests from the Leader, replacing the node’s current state with the Leader’s snapshot.
+
+### Main Challenges
+- Implementing the above functions requires proper use of multithreading and I/O knowledge. Key challenges include:
+
+1. Election Timeout and Split-Brain Issues:
+    - A suitable election timeout must be set to avoid frequent election requests that could lead to split-brain scenarios.
+    - Raft’s randomized election timeout mechanism reduces the likelihood of multiple nodes becoming candidates simultaneously.
+2. Log Consistency and Conflict Handling:
+    - When logs are inconsistent, the Leader must correctly roll back logs and overwrite conflicting entries on Followers. This requires the Leader to maintain an accurate log index and identify conflict locations.
+3. Performance Optimization:
+    - Log replication can cause delays, especially in unstable network conditions, necessitating performance optimization techniques.
+
+
+
 
 ●介绍一下raft协议
 Raft 协议是一种用于分布式系统中一致性问题的共识算法。它的设计目标是通过简化和分解共识问题，使其比 Paxos 更加易于理解和实现。Raft 协议广泛应用于分布式数据库、分布式文件系统等需要高可用性和容错能力的系统中。
@@ -389,53 +430,11 @@ Kubernetes（k8s）：用于分布式系统的自动化部署和管理，便于�
 在服务端实现 .proto 文件中定义的服务接口逻辑。brpc 会为每个方法生成一个基类，用户可以继承该类并实现自定义逻辑
 brpc 提供了 brpc::Server 类来启动服务端。将服务注册到 Server 实例中，设置端口号后启动服务
 在客户端中创建 brpc::Channel（brpc 提供的通信通道）实例，并将服务端地址、协议等配置到 Channel，并通过存根（stub）发起 RPC 调用
+
 7.项目中的技术八股
 ●项目中是否使用到了多线程，具体是怎么用的（代理层+数据管理层）
 ●是否使用到了锁，怎么用的？
 ●项目中使用到了哪些具体的框架？介绍一下各自的作用。
 ●使用到的文件读取的类是什么，为什么用这个类？
-高性能游戏商店平台
-项目介绍
-项目背景
-游戏商店平台面向大规模在线用户，需要支持用户进行游戏浏览、搜索、下载、购买等一系列操作。为了应对瞬时高并发访问和持续访问需求，后端系统需要具备极高的响应效率和弹性的负载承受能力，以确保用户体验流畅稳定
-需求分析与系统设计
-需求:
-用户注册与登录：
-用户可以创建账户、登录和注销。
-密码找回和重置功能。
-商品展示：
-商品列表展示，包括商品图片、名称、价格等信息。
-商品详情页，展示商品的详细描述、参数、价格、库存等。
-购物车：
-用户可以将商品添加到购物车中。
-修改购物车中商品的数量。
-删除购物车中的商品。
-订单管理：
-生成订单，包括用户信息、配送地址、支付方式等。
-查看订单状态和历史订单。
-取消订单或申请退款。
-支付功能：
-集成第三方支付接口，如支付宝、微信支付等。
-支持多种支付方式，包括在线支付、货到付款等。
-系统模块
-用户模块
-商品模块
-订单模块
-购物车模块
-支付模块
-后台管理模块
-核心挑战
-从高可用、高拓展安全性等目标进行优化
-高可用性设计与实现：
-●引入分布式架构和多层次缓存策略，确保平台在高并发访问场景下保持高可用性，减少单点故障风险。
-●使用负载均衡策略，将请求分散至不同的后端实例，并通过健康监测确保服务的高可用性。
-（一台机器服务10000个用户很正常,多个服务器提供相同功能是集群，不是分布式系统，分布式系统是不同功能分布在多个机器上）
-高性能优化：
-●设计并实现数据库分片、表分区、索引优化策略等，确保在大数据量下依然能够高效处理用户数据、交易记录等业务数据，避免数据库性能瓶颈。
-●使用 Redis 作为缓存，缓存热门数据以减少数据库负载，缩短查询延迟。优化后的查询响应时间显著降低，使用户体验得以提升。
-●优化 Kafka 配置，通过调整分区和副本，提高消息异步处理效率，能够承受瞬时高峰流量并实现快速响应
-安全性保障：
-●使用 JWT 进行用户身份认证和访问控制，确保用户隐私和交易信息的安全性，支持分布式环境中的无状态认证，保证系统的扩展性。
-●针对敏感操作实施权限控制与加密传输，确保用户数据安全，符合行业安全标准。
 
 
