@@ -106,7 +106,18 @@
     ```
     - The first argument `a` is the accumulated result, and `b` is the next element in the stream.
 
-4. 
+4. Example 3: Given list of lists of integers, flatten it into a single list of integers
+    ```java
+        List<List<Integer>> nestedList = Arrays.asList(
+            Arrays.asList(1, 2),
+            Arrays.asList(3, 4),
+            Arrays.asList(5, 6)
+        );
+        List<Integer> flatList = nestedList.stream()
+                                          .flatMap(List::stream)
+                                          .collect(Collectors.toList());
+        System.out.println(flatList); // Output: [1, 2, 3, 4, 5, 6]
+    ```
 
 
 ### 3. Optional Class
@@ -142,10 +153,97 @@
 
 ## Java 17
 ### 1. Sealed Class
+- To restrict which classes or interfaces can extend or implement a given class or interface to ensure more predictable and secure design.
+
+```java
+public sealed class Shape permits Circle, Rectangle, Triangle {
+    public abstract double area();
+}
+```
+1. Only `Circle`, `Rectangle`, and `Triangle` can extend `Shape`
+2. Each subclass must be marked as `final`, `sealed`, or `non-sealed`
 
 ### 2. Pattern Matching for `instanceof`
+- Traditional `instanceof`
+    - Before pattern matching, using `instanceof` typically required explicit type checking followed by a cast.
+
+    ```java
+        public void processShape(Object obj) {
+            if (obj instanceof Circle) {
+                Circle circle = (Circle) obj; // Explicit cast
+                System.out.println("Circle with radius: " + circle.getRadius());
+            } else if (obj instanceof Rectangle) {
+                Rectangle rectangle = (Rectangle) obj; // Explicit cast
+                System.out.println("Rectangle with area: " + rectangle.getArea());
+            }
+        }
+    ```
+- Pattern Matching with `instanceof`
+    - Allow you to declare a variable directly in the `instanceof` check, eliminating the need for an explicit cast.
+    - The variable is automatically typed and scoped to the block where the condition is true.
+    ```java
+        public void processShape(Object obj) {
+            if (obj instanceof Circle circle) {
+                System.out.println("Circle with radius: " + circle.getRadius());
+            } else if (obj instanceof Rectangle rectangle) {
+                System.out.println("Rectangle with area: " + rectangle.getArea());
+            }
+        }
+    ```
 
 ### 3. Records
+    1. Address the boilerplate issues of traditional immutable classes.
+        - Immutable Class: Designed to represent data that does not change after creation
+            1. Class declares with `final` to prevent subclassing.
+            2. All fields are `final` to ensure immutability after construction.
+        - Before `Records`
+            <details>
+            <summary>Code</summary>
+                ```java title="Traditional way to create immutable class"
+                    public class Point {
+                        private final int x;
+                        private final int y;
+
+                        public Point(int x, int y) {
+                            this.x = x;
+                            this.y = y;
+                        }
+
+                        public int getX() {
+                            return x;
+                        }
+
+                        public int getY() {
+                            return y;
+                        }
+
+                        @Override
+                        public boolean equals(Object o) {
+                            if (this == o) return true;
+                            if (o == null || getClass() != o.getClass()) return false;
+                            Point point = (Point) o;
+                            return x == point.x && y == point.y;
+                        }
+
+                        @Override
+                        public int hashCode() {
+                            return Objects.hash(x, y);
+                        }
+
+                        @Override
+                        public String toString() {
+                            return "Point{x=" + x + ", y=" + y + "}";
+                        }
+                    }
+                ```
+            </details>
+        - With `Records`
+            ```java
+                public record Point(int x, int y) { }
+            ```
+    2. Records are inherently immutable; their field are `final` and cannot be changed after construction.
+    3. Auto-Generated Method: Constructor, getter, `equals()`, `hashCode()`, and `toString()` methods; no setter, and the only way to create a new state is to instantiate a new immutable object.
+    4. Records support compact constructors for parameter validation and static methods for additional functionality.
 
 ## Java 21
 ### 1. Pattern Matching for Switch Statement

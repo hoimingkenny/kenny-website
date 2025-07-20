@@ -254,19 +254,39 @@ import Term from '@site/src/components/Term'
         - Log them without interrupting program flow.
     3. The `try-with-resources` statement
 
-
-
 ## Garbage Collection
 #### 1. What is Garbage?
 - Objects that are unreachable by the program, there is no way for the program to access them through any chain of references.
 
 #### 2. What is Not Garbage \(Live Object\)?
 - The objects that are still accessible by the program.
-1. Objects in staic fields of classes.
+1. Objects in staic fields of classes
+    - Stored in class's static memory and remain accessible as long as the class is loaded
+    - Example: `static Object myStaticObj = new Object();`
+2. Objects in local variable accessible from method frames
+    - Objects that referenced by local variables or operands in the stack frames of any active thread.
+3. Objects referenced by other live objects
 
+#### 3. What is GC Roots?
+- The starting points used by the GC to determine which objects are live.
+- Any object reachable from a GC root is considered live and not garbage.
+- Includes:
+    1. Objects in static fields of classes
+    2. Objects accessible from thread stacks
+    3. Objects referenced by JNI \(Jave Native Interface\) references in native methods.  
 
+#### 4. What is Stop-the-World?
+1. To collect the garbage, all threads should be paused to determine garbage.
+2. One of the main tasks of modern garbage collector are to reduce the STW pause.
+3. Method to reduce the STW:
+    1. Incremental:
+        - Do not collect all the garbage within GC pause.
+    2. Parallel:
+        - Collect the garbage in parallel threads within GC pause.
+    3. Concurrent:
+        - Collect the garbage concurrently with program execution.
 
-#### 1. What is Garbage Collection in Java, and How is it Triggered?
+#### 5. What is Garbage Collection in Java, and How is it Triggered?
 - <Term>Garbage Collection</Term>
     - It is responsible for freeing up memory occupied by objects that are no longer referenced by the program. 
 - Can be triggered in several ways:
@@ -279,7 +299,7 @@ import Term from '@site/src/components/Term'
     4. Object Count or Memory Usage Reaching a Threshold
         - Garbage collectors implement internal strategies to monitor object creation and memory usage, triggering garbage collection when a certain threshold is reached.
 
-#### 2. What is the garbage collection algorithm, and what problem does it solve?
+#### 6. What is the garbage collection algorithm, and what problem does it solve?
 - In traditional programming languages, developers are required to manually allocate and release memory, which can lead to problems such as memory leaks and memory overflows.
 - Java provide a simpler and safer programming environment, which is why it uses a garbage collector to automatically manage memory.
 - Main Goals:
@@ -287,7 +307,7 @@ import Term from '@site/src/components/Term'
     2. Prevent Memory Leak. Where memory is allocated to objects that cannot be freed, resulting in wasted memory resources.
     3. Prevent Memory Overflow. Where the program requires more memory than is available.
 
-#### 3. Differences Between Minor GC, Major GC, and Full GC, and Scenarios Triggering Full GC
+#### 7. Differences Between Minor GC, Major GC, and Full GC, and Scenarios Triggering Full GC
 - GC can be categorized into three types: Minor GC (also known as Young GC), Major GC (sometimes referred to as Old GC), and Full GC.
 
 - <Term>Minor GC (Young GC)</Term>

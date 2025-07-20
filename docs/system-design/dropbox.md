@@ -88,3 +88,12 @@ Request:
 ### Share File with Others
 
 ### Automatically Sync Files across Devices
+
+### How can you support large files?
+- Limitation
+  1. Web servers and clients typically have timeout settings to prevent indefinite waiting time.
+  2. Not possible to upload a 50GB file via a single POST request since both browswers and web servers often impose limit on the size of request payload.
+  3. Network Interruption: If the internet connection drops, the users will have to start the upload from scratch.
+- Solution
+  1. Chunking: to break the file into smaller piece and upload them one at a time/or in parallel.
+    1. Need to be done on the client, typically break the files into 5-10MB pieces, but can be adjusted based on the network conditions.
