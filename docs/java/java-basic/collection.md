@@ -77,7 +77,6 @@
     - Vector is the thread-safe alternative, as its methods are synchronized to ensure data consistency in multi-threaded environments.
 
 ### Map
-
 #### 1. Common non-thread-safe Map.
 - HashMap:
     - Implementation: Based on a hash table, it stores and retrieves key-value pairs using the hash value of the key. In JDK 1.8, it uses an array combined with linked lists and red-black trees.
