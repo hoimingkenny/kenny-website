@@ -106,6 +106,8 @@
     ```
     - The first argument `a` is the accumulated result, and `b` is the next element in the stream.
 
+4. 
+
 
 ### 3. Optional Class
 

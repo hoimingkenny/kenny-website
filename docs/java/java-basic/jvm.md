@@ -5,6 +5,7 @@ import Term from '@site/src/components/Term'
 # JVM
 
 ## JVM
+![](./assets/abstractjvm.png)
 #### 1. Describe JVM Memory Structure.
 - JVM Architecture
     1. Class Loader: Loads, links, and initializes `.class` files
@@ -256,10 +257,18 @@ import Term from '@site/src/components/Term'
 
 
 ## Garbage Collection
+#### 1. What is Garbage?
+- Objects that are unreachable by the program, there is no way for the program to access them through any chain of references.
+
+#### 2. What is Not Garbage \(Live Object\)?
+- The objects that are still accessible by the program.
+1. Objects in staic fields of classes.
+
+
 
 #### 1. What is Garbage Collection in Java, and How is it Triggered?
 - <Term>Garbage Collection</Term>
-    - It is responsible for freeing up memory occupied by objects that are no longer referenced by the program.
+    - It is responsible for freeing up memory occupied by objects that are no longer referenced by the program. 
 - Can be triggered in several ways:
     1. When Memory is Insufficient
         - JVM automatically triggers garbage collection when it detects that the heap memory is insufficient to allocate space for new objects.
