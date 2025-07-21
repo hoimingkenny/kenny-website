@@ -109,3 +109,23 @@ import Term from '@site/src/components/Term'
 2. <Term>Dynamic Proxy</Term>
     1. Generated at runtime using reflection mechanism.
     2. Can proxy multiple classes under an interface.
+
+
+#### 8. Difference between Spring and Spring Boot
+- Spring
+    1. Highly powerful enterprise-level Java development framework, providing modules to support application needs, such as DI, AOP, transaction management, and web application development.
+- Spring Boot
+    1. Was introducted to simplify the development and deployment of Spring applications, particularly for building microservices and enabling rapid development.
+    2. Compared to Spring, Spring Boot enhances development efficiency in the following ways:
+        1. Auto-Configuration: Use auto-configuration to minimize the configuration effoct for developers. By including a single "start" dependency, developers can bring in a set of related dependencies, allowing them to focus on business logic rather than configuration
+        2. Embedded Web Service: Spring Boot built-in web servers (such as Tomcat or Jetty), enabling develops to create standalone application without requiring an external web server.
+        3. Convention Over Configuration: Reduce configuration work through standardized convention. For example, it automatically loads starter via `spring.factories` and read properties from `application.properties` or `application.yml` files for confuguration.
+
+#### 9. Spring Boot 2 vs Spring Boot 3
+| Aspect | Spring Boot 2 | Spring Boot 3 |
+|--------|---------------|---------------|
+| Java Compatibility | Supports Java 8 to Java 17 | Requires Java 17 (minimum) |
+| Jakarta EE Transition      | Uses Java EE (javax.* namespace)                                             | Uses Jakarta EE 9/10 (jakarta.* namespace)                                   |
+| Spring Framework Version   | Built on Spring Framework 5.x                                                | Built on Spring Framework 6.0                                                |
+| New Features               | Lacks Virtual Threads                          | Supports Virtual Threads       |
+
