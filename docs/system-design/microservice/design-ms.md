@@ -8,16 +8,59 @@
 | Microservices | Highly decoupled, independently deployable services, each focusing on a specific business function, with lightweight communication (e.g., REST, gRPC). | - Independent scaling and deployment.  <br />- Technology diversity (different languages/tools per service).  <br />- Resilience (failure in one service doesn’t crash the system). | - Complex distributed system management.  <br />- Increased operational overhead.  <br />- Challenges in maintaining data consistency across services. |
 
 
-#### Q1. Advantage of using microservices?
+#### Q2. Advantage of using microservices?
 1. Scalability: Microservices can be scaled independently, optimizing resource usage for specific components.
+2. 可以自由使用不同的技術
 
-#### Q2. Tell me your understanding of microservices?
+#### Q3. Tell me your understanding of microservices?
 
-#### Q3. Characteristics of microservices?
+#### Q4. Characteristics of microservices?
 
-#### Q4. Best practices for designing microservices?
+#### Q5. Best practices for designing microservices?
+1. Each service should have a single responsibility.
+2. Each service should have their own database.
+3. 
 
-#### Q5. Describe microservices architecture?
+#### Q6. Describe microservices architecture?
 
 #### Q7. Challenges of microservices?
+1. Performance: Overhead of communication between services.
+2. Hard to track and debug
+    - Kibana 和 x-correlation-id去集中找log
+3. API expansion.
+4. 改一個feature要parallel 開發和deploy 多個服務
+
+
+#### Q8. Should Databases Be Shared or Separate per Service?
+1. Loose Coupling:
+    - Each microservice owns its data and schema, allowing independent changes without affecting other services.
+2. Scalability:
+    - Each service’s database can be scaled independently based on its workload.
+3. Data Isolation: 
+    - Reduces the risk of one service’s failure or bad query affecting others.
+
+#### Q9. When you design the microservices, what is difficult to handle/limitation of it?
+－ Hard to debug
+
+#### Q10. Call microservices, time out, how to deal with?
+1. Set Appropriate Timeout Thresholds
+2. Implement Retry Mechanisms
+3. Use Circuit Breakers
+
+#### Q11. How to make decision to decide how small or how big, for split microservices
+
+#### Q12. Some data share across 2 domain, how to decide primary key?
+- Use UUID: globally unique identifier
+- Understand the entity: e.g. `user_id` shared between `Users` and `Orders`
+- Use a composite key: e.g. `user_id` and `order_id`
+-
+
+
+#### Q13. when do development, in terms of Single sign on, what is the most complicated thing to deal with
+
+#### Q14. Security: If you have secret and password, in applications how to put and save , if you wan to take/get, how to do
+
+
+
+
 
