@@ -17,13 +17,14 @@ import Term from '@site/src/components/Term'
         - Native Method Stack: for native methods (e.g. C/C++)
     3. Execution Engine: interprets or compiles bytecode
 
-
 1. Program Counter
     1. What code and which line of code being executed is being held here.
     2. Considered as a line number indicator for the bytecode being executed by the current thread,
 2. Stack
     1. Each thread has its own stack.
-    2. Each stack has **frames**, each frame is created for each method call.
+        ![](./assets/threadStackHeap.png)
+        - Local variable: primetive types and references to objects
+    2. Each stack has frames, each frame is created for each method call.
     3. Each method execution creates a stack frame to store the local variable table, operand stack, dynamic linking, method exit information.
     4. When method A calls method B, a new frame for method B is created. This new frame will then become the current frame, and also the top frame of the stack. The stack has access to this top frame only.
     5. Each frame is removed after method execution.
@@ -327,3 +328,7 @@ import Term from '@site/src/components/Term'
         2. During a Minor GC (young generation garbage collection), if surviving objects cannot all be accommodated in the old generation, or if the old generation lacks sufficient space for the surviving objects, a Full GC is triggered to reclaim the entire heap.
         3. When the permanent generation (in versions before Java 8) or metaspace (in Java 8 and later) runs out of space.
     - Characteristics: Full GC is the most resource-intensive operation, as it requires stopping all working threads (Stop The World) to traverse the entire heap and reclaim unused objects. Therefore, efforts should be made to minimize Full GC triggers.
+
+
+### References
+1. Garbage collection in Java, with Animation and discussion of G1 GC, https://www.youtube.com/watch?v=UnaNQgzw4zY

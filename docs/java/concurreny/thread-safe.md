@@ -6,40 +6,40 @@ import Term2 from '@site/src/components/Term2'
 # Thread-Safe
 ### 1. What are the commonly used classes in `java.util.concurrent` (JUC) package?
 #### 1. Thread Pool Related
-##### <Term2>ThreadPoolExecutor</Term2>
+##### `ThreadPoolExecutor`
 1. The core thread pool class for creating and managing thread pools.
 2. Allows flexible configuration of thread pool parameters, such as core thread count, maximum thread count, and task queue.
-##### <Term2>Executors</Term2>
+##### `Executors`
 1. A thread pool factory class providing static methods to create different types of thread pools, such as `newFixedThreadPool` (fixed-size thread pool), `newCachedThreadPool` (cached thread pool), and `newSingleThreadExecutor` (single-thread pool).
 
 #### 2. Concurrent Collection Classes
-##### <Term2>ConcurrentHashMap</Term2>
+##### `ConcurrentHashMap`
 1. A thread-safe hash map.
 2. It uses techniques like segmented locking, allowing multiple threads to access different segments simultaneously, offering better performance than the `Hashtable` in high-concurrency scenarios.
-##### <Term2>CopyOnWriteArrayList</Term2>
+##### `CopyOnWriteArrayList`
 1. A thread-safe list that creates a new underlying array during modification operations, applying changes to the new array while read operations access the old array.
 2. Suitable for read-heavy, write-light scenarios.
 
 #### 3. Synchronization Utility Classes
-##### <Term2>CountDownLatch</Term2>
+##### `CountDownLatch`
 1. Allows one or more threads to wait for a set of other threads to complete their operations before proceeding.
 2. It uses a counter initialized to the number of threads; each thread calls `countDown` to decrement the counter upon task completion, and waiting threads proceed when the counter reaches zero.
 3. Commonly used when multiple threads need to complete tasks before summarizing or moving to the next step.
-##### <Term2>CyclicBarrier</Term2>
+##### `CyclicBarrier`
 1. Enables a group of threads to wait for each other until all reach a barrier point, then proceed together.
 2. Unlike `CountDownLatch`, `CyclicBarrier` is reusable; after all threads pass the barrier, the counter resets for the next round.
 3. Suitable for scenarios where threads collaborate and need to synchronize at specific stages before advancing.
-##### <Term2>Semaphore</Term2>
+##### `Semaphore`
 1. A semaphore controls the number of threads accessing a resource simultaneously.
 2. It maintains a permit counter; threads must acquire a permit before accessing the resource, decrementing the counter.
 3. If no permits are available, threads wait until others release permits.
 4. Often used to limit access to finite resources, like database connection pools or thread counts in a thread pool.
 
 #### 4. Atomic Classes
-##### <Term2>AtomicInteger</Term2>
+##### `AtomicInteger`
 1. An atomic integer class providing atomic operations like increment, decrement, and compare-and-swap.
 2. It leverages hardware-level atomic instructions to ensure thread safety without the performance overhead of locks, making it ideal for counting or state marking in multithreaded environments.
-##### <Term2>AtomicReference</Term2>
+##### `AtomicReference`
 1. An atomic reference class for performing atomic operations on object references.
 2. It ensures that object updates in multithreaded environments are atomic, preventing data inconsistencies.
 3. Commonly used in lock-free data structures or scenarios requiring atomic object updates.
