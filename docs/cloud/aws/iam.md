@@ -173,3 +173,8 @@ An identity service provided by AWS, suitable for scenarios where identity manag
 Users integrate external identity providers through Amazon Cognito.
 #### Custom IdP
 Use AWS STS (Security Token Service) to create temporary access tokens.
+
+### AWS Organizations
+1. Allow to manage multiple AWS accounts
+2. The main account is called the management account, and the others are called member accounts.
+3. Consolidate billing and cost management
