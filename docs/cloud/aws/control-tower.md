@@ -1,5 +1,4 @@
-# Federation Flow
-
+# Access AWS for Non-IAM users
 
 ### Flow
 1. Setup
@@ -10,6 +9,7 @@
     2. ADFS retrieves group memberships and issues a SAML assertion
 3. Role assumption
     1. The assertion is sent to AWS STS which grants temporary credentials for assuming a role in a target AWS account (e.g., a development account managed by Control Tower)
+    - Non-IAM user access the AWS resource by assuming IAM Role attached with token
 4. Access Management
     1. IAM Identity Center lists available roles/accounts.
     2. Control Tower's guardrails (e.g., SCPs) restrict actions across the organization while account-specific IAM policies control resource access
