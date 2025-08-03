@@ -1,4 +1,4 @@
 ## Network
 
 ### Site-to-Site VPN
-![](./assets/site2sitevpn.png)
+![](../assets/site2sitevpn.png)
