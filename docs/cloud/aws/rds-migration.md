@@ -30,6 +30,8 @@
             CALL mysql.rds_set_configuration('binlog_retention_hours', 24)
         ```
     3. Rollback Snapshot: Use AWS Backup service to create a manual snapshot of the RDS instance.
+3. Enterprise
+    - 
 
 ### II. Migration Execution Phase
 1. AWS DMS Migration Process

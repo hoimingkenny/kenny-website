@@ -12,13 +12,16 @@ I. Application Layer
 - 而且應用層是工作在Operation System的User Mode，傳輸層及以下則工作在Kernel Mode。
 
 II. Transport Layer
-- 傳輸單位: segment
+- Transmission: segment
 - Application Layer的data會傳給傳。Transport Layer是為應用層提供網絡支持的，但不會負責將data從一個設備傳輸到另一個設備。
 - 有兩個傳輸協議，分別是TCP和UDP。
-- TCP的全稱叫Transmission Control Protocol，大部份應用使用的正是TCP，比如HTTP應用層協議。TCP相比UDP多了很多特性，比如流量控制、超時重傳、拥塞控制等，這些都是為了保證數據包能可靠地傳送給對方。
+- TCP (Transmission Control Protocol)
+  1. Is used by most applications, such as the HTTP protocol. 
+  2. Compared to UDP, TCP includes features like flow control, timeout retransmission, and congestion control to ensure reliable data packet delivery to the recipient.
+
 - UDP只負責發送數據包，不保證數據包是否抵達對方，但它實時性相對更好，傳輸效率也更高。UDP也可以實現可靠傳輸，但需要把TCP的特性在應用層上實現。
 - 當data非常大，如果直接傳輸就不好控制，因此當傳輸層的data大小超過MSS（TCP max. message段長度），就要將數據包分塊，這樣即使中途有一個分塊丢失或損壞了，只需要重新發送這一個block，而不用重新發送整個數據包。在TCP中，每個block稱為一個TCP Segment。
-- 當設備作為接收方昤，傳輸層則要把數據包傳給應用，但是一台設備上可能會有很多應用在接收或傳輸數據，因為需要用Port將應用區分開來。
+- 當設備作為接收方時，傳輸層則要把數據包傳給應用，但是一台設備上可能會有很多應用在接收或傳輸數據，因為需要用Port將應用區分開來。
 - 比如80通常是Web Service用的，22通常是Remote登錄server用的。而對於browser(client)中的每一個標簽欄都是一個獨立的process，OS會為這些process分配臨時的port。
 - 傳輸層的message中會帶上port，因此接收方可以識別出這message是發送給那個應用。
 
